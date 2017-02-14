@@ -59,13 +59,13 @@ void tetgen_function::GetMTetrahedronList(vector<tetgen_element> &ELEM, tetgenio
 
 void tetgen_function::Geteleattribute(vector<tetgen_node> &NODE,vector<tetgen_element> &ELEM,tetgenio &out)
 {
- for(int i=0;i<out.numberoftetrahedra;i++)
-    {
-        int M1=(int)out.pointattributelist[out.tetrahedronlist[i*4+0]];
+	for(int i=0;i<out.numberoftetrahedra;i++)
+	{
+		int M1=(int)out.pointattributelist[out.tetrahedronlist[i*4+0]];
 		int M2=(int)out.pointattributelist[out.tetrahedronlist[i*4+1]];
 		int M3=(int)out.pointattributelist[out.tetrahedronlist[i*4+2]];
 		int M4=(int)out.pointattributelist[out.tetrahedronlist[i*4+3]];
-	
+
 		///4頂点すべてが同じ材質なら要素もそれにならう。
 		///ひとつでも異なっていたら空気と定義
 		if(M1==M2 && M2==M3 && M3==M4) out.tetrahedronattributelist[i]=M1;
@@ -77,7 +77,7 @@ void tetgen_function::Geteleattribute(vector<tetgen_node> &NODE,vector<tetgen_el
 			if(M1==IRON || M2==IRON || M3==IRON || M4==IRON) out.tetrahedronattributelist[i]=IRON;//コイルの要素はコイル接点の内側になるようにする
 		}
 		else out.tetrahedronattributelist[i]=AIR;
-    }
+	}
 }
 
 
@@ -112,7 +112,7 @@ void tetgen_function::GetFacetList(vector<tetgen_facet> &FACE, tetgenio &in, tet
 	{
 		temp.id=i+out.firstnumber;
 		for(int n=0;n<3;n++)	temp.node[n]=out.trifacelist[i*3+n];
-	//	temp.boundary=out.trifacemarkerlist[i];
+		//	temp.boundary=out.trifacemarkerlist[i];
 		temp.boundary=boundary;
 
 		FACE.push_back(temp);
@@ -129,7 +129,7 @@ void tetgen_function::MakeNodeFile(mpsconfig &CON, vector<tetgen_node> &NODE, ch
 	//cout<<filename<<" 出力"<<endl;
 
 	ofstream fout(filename);
-	
+
 	fout<<"#node"<<endl;
 	fout<<(int)NODE.size()<<" "<<"3"<<" "<<"1"<<" "<<"1"<<endl;
 	for(int i=0;i<(int)NODE.size();i++)
@@ -147,7 +147,7 @@ void tetgen_function::MakeNodeFile_NonAttributeAndBoundary(mpsconfig &CON, vecto
 	cout<<filename<<" 出力"<<endl;
 
 	ofstream fout(filename);
-	
+
 	fout<<"#node"<<endl;
 	fout<<(int)NODE.size()<<" "<<"3"<<" "<<"0"<<" "<<"0"<<endl;
 	for(int i=0;i<(int)NODE.size();i++)
@@ -207,12 +207,12 @@ void tetgen_function::MakePolyFile(mpsconfig &CON, tetgen_config &TET, vector<te
 	//fout<<(int)NODE.size()<<" "<<"3"<<" "<<"0"<<" "<<"0"<<endl;
 	//for(int i=0;i<(int)NODE.size();i++)
 	//{
-		//fout<<NODE[i].id<<" "<<NODE[i].r[A_X]<<" "<<NODE[i].r[A_Y]<<" "<<NODE[i].r[A_Z]<<" "<<NODE[i].attribute<<" "<<NODE[i].boundary<<endl;
+	//fout<<NODE[i].id<<" "<<NODE[i].r[A_X]<<" "<<NODE[i].r[A_Y]<<" "<<NODE[i].r[A_Z]<<" "<<NODE[i].attribute<<" "<<NODE[i].boundary<<endl;
 	//}
 
 	//faset list
 	fout<<"#faset"<<endl;
-//	fout<<"#facet"<<endl;
+	//	fout<<"#facet"<<endl;
 	fout<<(int)FACE.size()<<" "<<"1"<<endl;
 	for(int i=0;i<(int)FACE.size();i++)
 	{
@@ -237,7 +237,7 @@ void tetgen_function::MakePolyFile(mpsconfig &CON, tetgen_config &TET, vector<te
 	temp.id=0;
 	temp.region_number=0;
 	temp.region_attribute=0;
-	
+
 	if(CON.get_model_number()==2)
 	{
 		//空気
@@ -370,7 +370,7 @@ void tetgen_function::MakePolyFile(mpsconfig &CON, tetgen_config &TET, vector<te
 		for(int i=0;i<NODE.size();i++){
 			if(NODE[i].part_no==2)  i_no=i;//
 		}
-/*		//MAGELAST
+		/*		//MAGELAST
 		temp.id+=1;
 		temp.r[A_X]=NODE[i_no].r[A_X]-0.00001; //MAGELASTのノードが最初に追加される
 		temp.r[A_Y]=NODE[i_no].r[A_Y];
@@ -405,12 +405,12 @@ void tetgen_function::MakeSmeshFile(mpsconfig &CON, vector<tetgen_facet> &FACE, 
 	//fsmesh<<(int)NODE.size()<<" "<<"3"<<" "<<"0"<<" "<<"0"<<endl;
 	//for(int i=0;i<(int)NODE.size();i++)
 	//{
-		//fsmesh<<NODE[i].id<<" "<<NODE[i].r[A_X]<<" "<<NODE[i].r[A_Y]<<" "<<NODE[i].r[A_Z]<<" "<<NODE[i].attribute<<" "<<NODE[i].boundary<<endl;
+	//fsmesh<<NODE[i].id<<" "<<NODE[i].r[A_X]<<" "<<NODE[i].r[A_Y]<<" "<<NODE[i].r[A_Z]<<" "<<NODE[i].attribute<<" "<<NODE[i].boundary<<endl;
 	//}
 
 	//faset list
 	fsmesh<<"#faset"<<endl;
-//	fsmesh<<"#facet"<<endl;
+	//	fsmesh<<"#facet"<<endl;
 	fsmesh<<(int)FACE.size()<<" "<<"1"<<endl;
 	for(int i=0;i<(int)FACE.size();i++)
 	{
@@ -427,7 +427,7 @@ void tetgen_function::MakeSmeshFile(mpsconfig &CON, vector<tetgen_facet> &FACE, 
 	fsmesh<<"2"<<endl;
 	fsmesh<<"1"<<" "<<"0"<<" "<<"0"<<" "<<le*2<<" "<<"1"<<" "<<"1"<<endl;
 	fsmesh<<"2"<<" "<<"0"<<" "<<"0"<<" "<<-le*2<<" "<<"2"<<" "<<"2"<<endl;
-	
+
 	fsmesh.close();
 }
 
@@ -450,24 +450,24 @@ void tetgen_function::SetElastBoundary(mpsconfig &CON, vector<mpselastic> &PART,
 	double le=CON.get_distancebp();	//粒子間距離
 	int type;
 	int part_no;
-	
+
 	//磁性エラストマー
-		for(int i=0;i<(int)PART.size();i++)
+	for(int i=0;i<(int)PART.size();i++)
+	{
+		if(PART[i].type==MAGELAST)
 		{
-			if(PART[i].type==MAGELAST)
-			{
-				part_no=i;
-				for(int d=0;d<3;d++) temp.r[d]=PART[i].r[d];
-				type=PART[i].type;
-				temp.boundary=0;	
-				if(PART[i].surface==0) temp.attribute=MAGELAST;
-				else if(PART[i].surface==1) temp.attribute=FACE_P;
-				trans.push_back(part_no);
-				NODEe.push_back(temp);
-				temp.id+=1;
-			}
-			
+			part_no=i;
+			for(int d=0;d<3;d++) temp.r[d]=PART[i].r[d];
+			type=PART[i].type;
+			temp.boundary=0;	
+			if(PART[i].surface==0) temp.attribute=MAGELAST;
+			else if(PART[i].surface==1) temp.attribute=FACE_P;
+			trans.push_back(part_no);
+			NODEe.push_back(temp);
+			temp.id+=1;
 		}
+
+	}
 	//nodeファイル作成
 	cout<<"MREnode作成-----";
 	MakeNodeFile(CON, NODEe, "MAGELAST.node");
@@ -480,10 +480,10 @@ void tetgen_function::SetElastBoundary(mpsconfig &CON, vector<mpselastic> &PART,
 	cout<<"MREメッシュ分割-----";
 	tetrahedralize("", &in, &out);
 	cout<<"OK"<<endl;
-		// i 要素内へ節点を追加(今の所無くても機能している)
-		// f .faceファイルに境界ではない面も含める
-		// e .edgeファイルの出力(ONにするとなぜか止まってしまう)
-		// n .neighファイルの出力
+	// i 要素内へ節点を追加(今の所無くても機能している)
+	// f .faceファイルに境界ではない面も含める
+	// e .edgeファイルの出力(ONにするとなぜか止まってしまう)
+	// n .neighファイルの出力
 
 	//出力
 	out.save_nodes("MAGELAST_whole");
@@ -522,8 +522,8 @@ void tetgen_function::SetElastBoundary(mpsconfig &CON, vector<mpselastic> &PART,
 	MakeElemFile(CON, ELEMe, "boundary_MAGELAST.ele");
 	MakeFaceFile(CON, FACEe, "boundary_MAGELAST.face");
 	////////////////ここまででエラストマーのメッシュが切れた//////////////////////*/
-//	out.save_elements("boundary_MAGELAST");
-//	out.save_faces("boundary_MAGELAST");
+	//	out.save_elements("boundary_MAGELAST");
+	//	out.save_faces("boundary_MAGELAST");
 }
 
 
@@ -586,7 +586,7 @@ void tetgen_function::DelThinTetrahedron(mpsconfig &CON, tetgen_config &TET, vec
 		count=0;
 		for(int n=0;n<4;n++)
 		{
-			if(NODE[ELEM[i].node[n]].boundary==FRFLUID)	count+=1;
+		if(NODE[ELEM[i].node[n]].boundary==FRFLUID)	count+=1;
 		}
 		if(count==4)	flag2=ON;
 		else			flag2=OFF;//*/
@@ -637,7 +637,7 @@ void tetgen_function::DelTetrahedron_OutsideDummy(mpsconfig &CON, vector<tetgen_
 	while(i<(int)ELEM.size())
 	{
 		int flag=0;	//1で削除
-		
+
 		//1つでもダミー(空気)節点があればフラグON
 		int count=0;
 		for(int n=0;n<4;n++)
@@ -653,7 +653,7 @@ void tetgen_function::DelTetrahedron_OutsideDummy(mpsconfig &CON, vector<tetgen_
 		int count=0;
 		for(int n=0;n<4;n++)
 		{
-			if(NODE[ELEM[i].node[n]].boundary==BOFLUID)	count+=1;
+		if(NODE[ELEM[i].node[n]].boundary==BOFLUID)	count+=1;
 		}
 		if(count==4)	flag=1;//*/
 
@@ -691,7 +691,7 @@ void tetgen_function::SetRelation_NodeNode(mpsconfig &CON, vector<tetgen_node> &
 	{
 		int node1=out.edgelist[i*2+0];
 		int node2=out.edgelist[i*2+1];
-		
+
 		NODE[node1].nei_node.push_back(node2);
 		NODE[node2].nei_node.push_back(node1);
 	}
@@ -727,16 +727,16 @@ void tetgen_function::SetRelation_NodeElem(mpsconfig &CON, vector<tetgen_node> &
 	ofstream fout("neigh_node-elem.dat");
 	for(int i=0;i<(int)NODE.size();i++)
 	{
-		fout<<NODE[i].id;
-		for(int n=0;n<(int)NODE[i].nei_elem.size();n++)
-		{
-			fout<<" "<<NODE[i].nei_elem[n];
-		}
-		fout<<endl;
+	fout<<NODE[i].id;
+	for(int n=0;n<(int)NODE[i].nei_elem.size();n++)
+	{
+	fout<<" "<<NODE[i].nei_elem[n];
+	}
+	fout<<endl;
 
-		//最大最小更新
-		//if(max<(int)NODE[i].nei_elem.size())	max=(int)NODE[i].nei_elem.size();
-		//if(min>(int)NODE[i].nei_elem.size())	min=(int)NODE[i].nei_elem.size();
+	//最大最小更新
+	//if(max<(int)NODE[i].nei_elem.size())	max=(int)NODE[i].nei_elem.size();
+	//if(min>(int)NODE[i].nei_elem.size())	min=(int)NODE[i].nei_elem.size();
 	}
 	fout.clear();
 
@@ -752,9 +752,9 @@ void tetgen_function::SetRelation_NodeElem(mpsconfig &CON, vector<tetgen_node> &
 void tetgen_function::SetRelation_ElemElem(mpsconfig &CON, vector<tetgen_node> &NODE, vector<tetgen_element> &ELEM)
 {
 	cout<<"要素-要素関係";
-	
+
 	vector<int> nei_all;
-	
+
 	//初期化
 	for(int i=0;i<(int)ELEM.size();i++)
 	{
@@ -765,7 +765,7 @@ void tetgen_function::SetRelation_ElemElem(mpsconfig &CON, vector<tetgen_node> &
 	{
 		//4つの節点の節点-要素関係にある要素を格納する
 		nei_all.clear();
-		
+
 		for(int n=0;n<4;n++)
 		{
 			for(int j=0;j<(int)NODE[ELEM[i].node[n]].nei_elem.size();j++)
@@ -823,12 +823,12 @@ void tetgen_function::SetRelation_ElemElem(mpsconfig &CON, vector<tetgen_node> &
 	ofstream fout("neigh.dat");
 	for(int i=0;i<(int)ELEM.size();i++)
 	{
-		fout<<ELEM[i].id;
-		for(int n=0;n<4;n++)
-		{
-			fout<<" "<<ELEM[i].nei_elem[n];		
-		}
-		fout<<endl;
+	fout<<ELEM[i].id;
+	for(int n=0;n<4;n++)
+	{
+	fout<<" "<<ELEM[i].nei_elem[n];		
+	}
+	fout<<endl;
 	}
 	fout.clear();
 	//*/
@@ -844,9 +844,9 @@ void tetgen_function::GetFacetList_from_neigh(mpsconfig &CON, vector<tetgen_elem
 
 	//初期化
 	FACE.clear();
-	
+
 	int id=0;	//id用(表面の数)
-	
+
 	for(int i=0;i<(int)ELEM.size();i++)
 	{
 		for(int n=0;n<4;n++)
@@ -883,10 +883,10 @@ void tetgen_function::SelectFaceNode(mpsconfig &CON, vector<tetgen_node> &NODE, 
 	//boundaryをフラグに使わせてもらう。
 	//boundary==-1は表面を構成していない節点→削除
 	//boundary==-2は表面を構成している節点→新しい節点番号を与える
-	
+
 	//とりあえず初期化
 	for(int i=0;i<(int)NODE.size();i++)	NODE[i].boundary=-1;
-	
+
 	//FACEにある節点はflagを-2に
 	for(int i=0;i<(int)FACE.size();i++)
 	{
@@ -961,7 +961,7 @@ void tetgen_function::SetAirBoundary(mpsconfig &CON, tetgen_config &TET, vector<
 	in.initialize();
 	out.initialize();
 
-//	vector<tetgen_element> ELEMa;
+	//	vector<tetgen_element> ELEMa;
 
 	tetgen_node temp_n;
 	temp_n.id=0;
@@ -1027,9 +1027,9 @@ void tetgen_function::SetAirBoundary(mpsconfig &CON, tetgen_config &TET, vector<
 	//磁性エラストマー
 	//解析領域の端にきた時に節点を置いているがforループ使わなくても良いのでは？？？
 	//あと円筒形に置いたほうが良い
-	
+
 	{
-//		temp_n.boundary=ELECTRODE1;
+		//		temp_n.boundary=ELECTRODE1;
 
 		//for(int z=lz;z<=uz;z++)
 		//{
@@ -1055,76 +1055,76 @@ void tetgen_function::SetAirBoundary(mpsconfig &CON, tetgen_config &TET, vector<
 		divN[A_Z]=20;
 		double regionR[2]={0.0, CON.get_RU()};
 		double regionZ[2]={CON.get_ZD(), CON.get_ZU()};
-	//divN[3];					//各辺の分割数
-	
-	double Rmin=0;				//解析領域
-	double Rmax=regionR[1];
-	double Zmin=regionZ[0];
-	double Zmax=regionZ[1];
+		//divN[3];					//各辺の分割数
 
-	double divL[3];//分割幅
-	divL[A_R]=(Rmax-Rmin)/divN[A_R];
-	divL[A_t]=(2*PI)/divN[A_t];
-	divL[A_Z]=(Zmax-Zmin)/divN[A_Z];
+		double Rmin=0;				//解析領域
+		double Rmax=regionR[1];
+		double Zmin=regionZ[0];
+		double Zmax=regionZ[1];
 
-	point3D NODE01;
+		double divL[3];//分割幅
+		divL[A_R]=(Rmax-Rmin)/divN[A_R];
+		divL[A_t]=(2*PI)/divN[A_t];
+		divL[A_Z]=(Zmax-Zmin)/divN[A_Z];
 
-	/////////////////////底面
-					//中心点
-	temp_n.r[A_X]=0;
-	temp_n.r[A_Y]=0;
-	temp_n.r[A_Z]=Zmin;					//解析領域の底面
-	NODEa.push_back(temp_n);
-	temp_n.id+=1;
+		point3D NODE01;
 
-	for(int n=1;n<=divN[A_R];n++)
-	{
-		for(int m=0;m<divN[A_t];m++)
+		/////////////////////底面
+		//中心点
+		temp_n.r[A_X]=0;
+		temp_n.r[A_Y]=0;
+		temp_n.r[A_Z]=Zmin;					//解析領域の底面
+		NODEa.push_back(temp_n);
+		temp_n.id+=1;
+
+		for(int n=1;n<=divN[A_R];n++)
 		{
-			double r=divL[A_R]*n;
-			double theta=divL[A_t]*m;
-			temp_n.r[A_X]=r*cos(theta);
-			temp_n.r[A_Y]=r*sin(theta);
-			temp_n.r[A_Z]=Zmin;					//解析領域の底面
-			NODEa.push_back(temp_n);
-			temp_n.id+=1;				//対応する粒子が存在しないから-1を格納
+			for(int m=0;m<divN[A_t];m++)
+			{
+				double r=divL[A_R]*n;
+				double theta=divL[A_t]*m;
+				temp_n.r[A_X]=r*cos(theta);
+				temp_n.r[A_Y]=r*sin(theta);
+				temp_n.r[A_Z]=Zmin;					//解析領域の底面
+				NODEa.push_back(temp_n);
+				temp_n.id+=1;				//対応する粒子が存在しないから-1を格納
+			}
 		}
-	}
-	//////////////////////////////////上面
-					//中心点
-	temp_n.r[A_X]=0;
-	temp_n.r[A_Y]=0;
-	temp_n.r[A_Z]=Zmax;					//解析領域の底面
-	NODEa.push_back(temp_n);
-			temp_n.id+=1;	
-	for(int n=1;n<=divN[A_R];n++)
-	{
-		for(int m=0;m<divN[A_t];m++)
+		//////////////////////////////////上面
+		//中心点
+		temp_n.r[A_X]=0;
+		temp_n.r[A_Y]=0;
+		temp_n.r[A_Z]=Zmax;					//解析領域の底面
+		NODEa.push_back(temp_n);
+		temp_n.id+=1;	
+		for(int n=1;n<=divN[A_R];n++)
 		{
-			double r=divL[A_R]*n;
-			double theta=divL[A_t]*m;
-			temp_n.r[A_X]=r*cos(theta);
-			temp_n.r[A_Y]=r*sin(theta);
-			temp_n.r[A_Z]=Zmax;					//解析領域の底面
-			NODEa.push_back(temp_n);
-			temp_n.id+=1;					//対応する粒子が存在しないから-1を格納
+			for(int m=0;m<divN[A_t];m++)
+			{
+				double r=divL[A_R]*n;
+				double theta=divL[A_t]*m;
+				temp_n.r[A_X]=r*cos(theta);
+				temp_n.r[A_Y]=r*sin(theta);
+				temp_n.r[A_Z]=Zmax;					//解析領域の底面
+				NODEa.push_back(temp_n);
+				temp_n.id+=1;					//対応する粒子が存在しないから-1を格納
+			}
 		}
-	}
 
-	//側面
-	double RR=divL[A_R]*divN[A_R];
-	for(int n=1;n<divN[A_Z];n++)
-	{
-		for(int m=0;m<divN[A_t];m++)
+		//側面
+		double RR=divL[A_R]*divN[A_R];
+		for(int n=1;n<divN[A_Z];n++)
 		{
-			double theta=divL[A_t]*m;
-			temp_n.r[A_X]=RR*cos(theta);
-			temp_n.r[A_Y]=RR*sin(theta);;
-			temp_n.r[A_Z]=Zmin+n*divL[A_Z];		
-			NODEa.push_back(temp_n);
-			temp_n.id+=1;						//対応する粒子が存在しないから-1を格納
+			for(int m=0;m<divN[A_t];m++)
+			{
+				double theta=divL[A_t]*m;
+				temp_n.r[A_X]=RR*cos(theta);
+				temp_n.r[A_Y]=RR*sin(theta);;
+				temp_n.r[A_Z]=Zmin+n*divL[A_Z];		
+				NODEa.push_back(temp_n);
+				temp_n.id+=1;						//対応する粒子が存在しないから-1を格納
+			}
 		}
-	}
 
 		/////////////////////////////////////////////////////////////////////////////
 	}
@@ -1132,7 +1132,7 @@ void tetgen_function::SetAirBoundary(mpsconfig &CON, tetgen_config &TET, vector<
 	//nodeファイル作成
 	MakeNodeFile(CON, NODEa, "NODEa1.node");
 	//.eleの取得
-//	GetTetrahedronList(ELEMa, in, out);
+	//	GetTetrahedronList(ELEMa, in, out);
 
 	in.load_node("NODEa1");
 	tetrahedralize("", &in, &out);
@@ -1146,15 +1146,15 @@ void tetgen_function::SetAirBoundary(mpsconfig &CON, tetgen_config &TET, vector<
 	//.faceファイル作成
 	//MakeFaceFile(CON, FACEa1, "FACEa1.face");
 	//長い要素の除去
-//	DelThinTetrahedron(CON, TET, NODEa, ELEMa, in, out);
+	//	DelThinTetrahedron(CON, TET, NODEa, ELEMa, in, out);
 
 	//節点-要素関係
-//	SetRelation_NodeElem(CON, NODEa, ELEMa);
+	//	SetRelation_NodeElem(CON, NODEa, ELEMa);
 	//要素-要素関係
-//	SetRelation_ElemElem(CON, NODEa, ELEMa);
+	//	SetRelation_ElemElem(CON, NODEa, ELEMa);
 	//要素-要素関係より弾性体表面取得
-//	GetFacetList_from_neigh(CON, ELEMa, FACEa);
-	
+	//	GetFacetList_from_neigh(CON, ELEMa, FACEa);
+
 
 }
 
@@ -1182,7 +1182,7 @@ void tetgen_function::SetAirFineBoundary(mpsconfig &CON, vector<mpselastic> &PAR
 	double lz=CON.get_magnet_Z()-CON.get_magnet_H()/2-5*le;		//円筒最小高さ -5*le
 	double dx=le;					//円筒長さ方向メッシュ粗さ
 
-		//上下側面でテーパーを付けたい時は分けるべきだがまとめてもいいかも・・・
+	//上下側面でテーパーを付けたい時は分けるべきだがまとめてもいいかも・・・
 
 	//中心
 	temp.r[A_X]=0;
@@ -1212,22 +1212,22 @@ void tetgen_function::SetAirFineBoundary(mpsconfig &CON, vector<mpselastic> &PAR
 	//側面	//R*=1.005;	//わずかに太くする(メッシュが繋がるのを防ぐため)・・・これはいらん
 	for(double z=uz-dx;z>lz;z-=dx)
 	{
-			int nr=static_cast<int>(2.0*PI*R/dx);//r=dRの時はnr=7
-			double d_theta=360.0/static_cast<double>(nr);
+		int nr=static_cast<int>(2.0*PI*R/dx);//r=dRの時はnr=7
+		double d_theta=360.0/static_cast<double>(nr);
 
-			for(double theta=0.0;theta<360.0-0.1*d_theta;theta+=d_theta)
-			{
-					temp.r[A_X]=R*sin(theta*PI/180.0);
-					temp.r[A_Y]=R*cos(theta*PI/180.0);
-					temp.r[A_Z]=z;
-					temp.boundary=0;
-					NODEa.push_back(temp);
-					temp.id+=1;
-			}	
+		for(double theta=0.0;theta<360.0-0.1*d_theta;theta+=d_theta)
+		{
+			temp.r[A_X]=R*sin(theta*PI/180.0);
+			temp.r[A_Y]=R*cos(theta*PI/180.0);
+			temp.r[A_Z]=z;
+			temp.boundary=0;
+			NODEa.push_back(temp);
+			temp.id+=1;
+		}	
 	}
 
 	//下面
-	
+
 
 	for(double r=dx;r<R+0.1*dx;r+=dx)//	for(double r=R;r>le-0.1*le;r-=le)
 	{
@@ -1236,17 +1236,17 @@ void tetgen_function::SetAirFineBoundary(mpsconfig &CON, vector<mpselastic> &PAR
 
 		for(double theta=0.0;theta<360.0-0.1*d_theta;theta+=d_theta)
 		{
-				temp.r[A_X]=r*sin(theta*PI/180.0);
-				temp.r[A_Y]=r*cos(theta*PI/180.0);
-				temp.r[A_Z]=lz;
-				temp.boundary=0;
-				NODEa.push_back(temp);
-				temp.id+=1;
+			temp.r[A_X]=r*sin(theta*PI/180.0);
+			temp.r[A_Y]=r*cos(theta*PI/180.0);
+			temp.r[A_Z]=lz;
+			temp.boundary=0;
+			NODEa.push_back(temp);
+			temp.id+=1;
 		}
 	}//*/
 
 	//.stlファイル読み取り
-//	in.load_stl("COIL");
+	//	in.load_stl("COIL");
 	//nodeファイル作成
 	MakeNodeFile(CON, NODEa, "air2.node");
 	//.nodeファイル読み取り
@@ -1254,10 +1254,10 @@ void tetgen_function::SetAirFineBoundary(mpsconfig &CON, vector<mpselastic> &PAR
 
 	//まずは流体節点のみで分割
 	tetrahedralize("", &in, &out);
-		// i 要素内へ節点を追加(今の所無くても機能している)
-		// f .faceファイルに境界ではない面も含める
-		// e .edgeファイルの出力(ONにするとなぜか止まってしまう)
-		// n .neighファイルの出力
+	// i 要素内へ節点を追加(今の所無くても機能している)
+	// f .faceファイルに境界ではない面も含める
+	// e .edgeファイルの出力(ONにするとなぜか止まってしまう)
+	// n .neighファイルの出力
 	//出力
 	out.save_nodes("air2_whole");
 	out.save_elements("air2_whole");
@@ -1347,7 +1347,7 @@ void tetgen_function::SetColumnElectrodeBoundary(mpsconfig &CON, tetgen_config &
 	double dL=TET.fine_column_L;	//円柱長さ方向メッシュ粗さ
 	//double z0=0;					//上面の位置
 
-	
+
 	//上面
 	//中心
 	temp.r[A_X]=0;
@@ -1380,7 +1380,7 @@ void tetgen_function::SetColumnElectrodeBoundary(mpsconfig &CON, tetgen_config &
 	rc*=1.005;	//わずかに太くする(メッシュが繋がるのを防ぐため)
 	int nr=int(2.0*PI*rc/(2*le));//leが2倍されていることに注意
 	double d_theta=360.0/(double)nr;
-	
+
 	while(1)
 	{
 		//z方向への移動
@@ -1583,77 +1583,114 @@ void tetgen_function::SetMagnetBoundary(mpsconfig &CON, tetgen_config &TET, vect
 
 	//上下側面でテーパーを付けたい時は分けるべきだがまとめてもいいかも・・・
 
-	//中心
-	temp.r[A_X]=0;
-	temp.r[A_Y]=0;	
-	temp.r[A_Z]=Zmax;
-	NODEc.push_back(temp);
-	temp.id+=1;
+	////中心
+	//temp.r[A_X]=0;
+	//temp.r[A_Y]=0;	
+	//temp.r[A_Z]=Zmax;
+	//NODEc.push_back(temp);
+	//temp.id+=1;
+
+	int Nd=10.E-3/le+1;	//le=9.e-3/4.;
+	double le2=10.E-3/Nd;
 
 	//上面
-	for(double r=dR;r<R+0.1*dR;r+=dR)
+	for(int i=0;i<Nd+1;i++)
 	{
-		int nr=static_cast<int>(2.0*PI*r/dR);//正何角形で近似するか（角度方向の分割数）
-		double d_theta=360.0/static_cast<double>(nr);
-
-		for(double theta=0.0;theta<360-0.1*d_theta;theta+=d_theta)
+		for(int j=0;j<Nd+1;j++)
 		{
-			temp.r[A_X]=r*sin(theta*PI/180.0);
-			temp.r[A_Y]=r*cos(theta*PI/180.0);	
-			temp.r[A_Z]=Zmax;
-			NODEc.push_back(temp);
-			temp.id+=1;
-		}
-	}
-
-	//側面	//R*=1.005;	//わずかに太くする(メッシュが繋がるのを防ぐため)・・・これはいらん
-	for(double z=Zmax-dL;z>Zmin;z-=dL)
-	{
-		//中心（忘れない）
-		temp.r[A_X]=0;
-		temp.r[A_Y]=0;	
-		temp.r[A_Z]=z;
-		NODEc.push_back(temp);
-		temp.id+=1;
-
-		for(double r=dR;r<R+0.1*dR;r+=dR)
-		{
-			int nr=static_cast<int>(2.0*PI*r/dR);//r=dRの時はnr=7
-			double d_theta=360.0/static_cast<double>(nr);
-
-			for(double theta=0.0;theta<360.0-0.1*d_theta;theta+=d_theta)
+			for(int k=0;k<Nd+1;k++)
 			{
-				temp.r[A_X]=r*sin(theta*PI/180.0);
-				temp.r[A_Y]=r*cos(theta*PI/180.0);
-				temp.r[A_Z]=z;
+				temp.r[A_X]=i*(le2)-5.E-3;
+				temp.r[A_Y]=j*(le2)-5.E-3;	
+				temp.r[A_Z]=k*(le2)+19.22E-3;
 				NODEc.push_back(temp);
 				temp.id+=1;
-			}	
+			}
 		}
+
 	}
+	////分割数決定
+	//double le=CON.get_distancebp();
+	//double R=CON.get_magnet_r();	//磁石半径
+	//double L=CON.get_magnet_H();	//磁石高さ
+	//double Zmin=CON.get_magnet_Z()-0.5*CON.get_magnet_H();
+	//double Zmax=CON.get_magnet_Z()+0.5*CON.get_magnet_H();
+	//double dL=(Zmax-Zmin)/10;	//磁石長さ方向メッシュ粗さ
+	//double dR=le;//半径方向の分割単位
 
-	//下面
-	//中心
-	temp.r[A_X]=0;
-	temp.r[A_Y]=0;	
-	temp.r[A_Z]=Zmin;
-	NODEc.push_back(temp);
-	temp.id+=1;
+	////上下側面でテーパーを付けたい時は分けるべきだがまとめてもいいかも・・・
 
-	for(double r=dR;r<R+0.1*dR;r+=dR)//	for(double r=R;r>le-0.1*le;r-=le)
-	{
-		int nr=static_cast<int>(2.0*PI*r/dR);
-		double d_theta=360.0/static_cast<double>(nr);
+	////中心
+	//temp.r[A_X]=0;
+	//temp.r[A_Y]=0;	
+	//temp.r[A_Z]=Zmax;
+	//NODEc.push_back(temp);
+	//temp.id+=1;
 
-		for(double theta=0.0;theta<360.0-0.1*d_theta;theta+=d_theta)
-		{
-			temp.r[A_X]=r*sin(theta*PI/180.0);
-			temp.r[A_Y]=r*cos(theta*PI/180.0);	
-			temp.r[A_Z]=Zmin;
-			NODEc.push_back(temp);
-			temp.id+=1;
-		}
-	}//*/
+	////上面
+	//for(double r=dR;r<R+0.1*dR;r+=dR)
+	//{
+	//	int nr=static_cast<int>(2.0*PI*r/dR);//正何角形で近似するか（角度方向の分割数）
+	//	double d_theta=360.0/static_cast<double>(nr);
+
+	//	for(double theta=0.0;theta<360-0.1*d_theta;theta+=d_theta)
+	//	{
+	//		temp.r[A_X]=r*sin(theta*PI/180.0);
+	//		temp.r[A_Y]=r*cos(theta*PI/180.0);	
+	//		temp.r[A_Z]=Zmax;
+	//		NODEc.push_back(temp);
+	//		temp.id+=1;
+	//	}
+	//}
+
+	////側面	//R*=1.005;	//わずかに太くする(メッシュが繋がるのを防ぐため)・・・これはいらん
+	//for(double z=Zmax-dL;z>Zmin;z-=dL)
+	//{
+	//	//中心（忘れない）
+	//	temp.r[A_X]=0;
+	//	temp.r[A_Y]=0;	
+	//	temp.r[A_Z]=z;
+	//	NODEc.push_back(temp);
+	//	temp.id+=1;
+
+	//	for(double r=dR;r<R+0.1*dR;r+=dR)
+	//	{
+	//		int nr=static_cast<int>(2.0*PI*r/dR);//r=dRの時はnr=7
+	//		double d_theta=360.0/static_cast<double>(nr);
+
+	//		for(double theta=0.0;theta<360.0-0.1*d_theta;theta+=d_theta)
+	//		{
+	//			temp.r[A_X]=r*sin(theta*PI/180.0);
+	//			temp.r[A_Y]=r*cos(theta*PI/180.0);
+	//			temp.r[A_Z]=z;
+	//			NODEc.push_back(temp);
+	//			temp.id+=1;
+	//		}	
+	//	}
+	//}
+
+	////下面
+	////中心
+	//temp.r[A_X]=0;
+	//temp.r[A_Y]=0;	
+	//temp.r[A_Z]=Zmin;
+	//NODEc.push_back(temp);
+	//temp.id+=1;
+
+	//for(double r=dR;r<R+0.1*dR;r+=dR)//	for(double r=R;r>le-0.1*le;r-=le)
+	//{
+	//	int nr=static_cast<int>(2.0*PI*r/dR);
+	//	double d_theta=360.0/static_cast<double>(nr);
+
+	//	for(double theta=0.0;theta<360.0-0.1*d_theta;theta+=d_theta)
+	//	{
+	//		temp.r[A_X]=r*sin(theta*PI/180.0);
+	//		temp.r[A_Y]=r*cos(theta*PI/180.0);	
+	//		temp.r[A_Z]=Zmin;
+	//		NODEc.push_back(temp);
+	//		temp.id+=1;
+	//	}
+	//}//*/
 
 	//nodeファイル作成
 	MakeNodeFile(CON, NODEc, "NODEc.node");
@@ -1679,7 +1716,7 @@ void tetgen_function::SetCOILBoundary(mpsconfig &CON, tetgen_config &TET, vector
 	in.initialize();
 	out.initialize();
 
-//	vector<tetgen_element> ELEMc;
+	//	vector<tetgen_element> ELEMc;
 	tetgen_node temp;
 	temp.id=0;
 
@@ -1712,28 +1749,28 @@ void tetgen_function::SetCOILBoundary(mpsconfig &CON, tetgen_config &TET, vector
 		for(double theta=0.0;theta<360-0.1*d_theta;theta+=d_theta)
 		{
 			if(r<=dR*4){
-			temp.r[A_X]=r*sin(theta*PI/180.0);
-			temp.r[A_Y]=r*cos(theta*PI/180.0);	
-			temp.r[A_Z]=Zmax;
-			temp.attribute=IRON; //IRON
-			temp.boundary=0;
-			NODEc.push_back(temp);
-			temp.id+=1;
+				temp.r[A_X]=r*sin(theta*PI/180.0);
+				temp.r[A_Y]=r*cos(theta*PI/180.0);	
+				temp.r[A_Z]=Zmax;
+				temp.attribute=IRON; //IRON
+				temp.boundary=0;
+				NODEc.push_back(temp);
+				temp.id+=1;
 			}
 			else {
-			temp.r[A_X]=r*sin(theta*PI/180.0);
-			temp.r[A_Y]=r*cos(theta*PI/180.0);	
-			temp.r[A_Z]=Zmax;
-			temp.attribute=COIL; //COIL
-			if(r>=R-0.1*dR){	//(r==R)だと誤差で通らない
-				int a=int((Zmax-Zmin)/dL);		//コイルの表面にディレクレ形境界条件を挿入
-				if(a%3==2) temp.boundary=23;
-				else if(a%3==1) temp.boundary=22;
-				else if(a%3==0) temp.boundary=21;
-			}
-			else temp.boundary=0;
-			NODEc.push_back(temp);
-			temp.id+=1;
+				temp.r[A_X]=r*sin(theta*PI/180.0);
+				temp.r[A_Y]=r*cos(theta*PI/180.0);	
+				temp.r[A_Z]=Zmax;
+				temp.attribute=COIL; //COIL
+				if(r>=R-0.1*dR){	//(r==R)だと誤差で通らない
+					int a=int((Zmax-Zmin)/dL);		//コイルの表面にディレクレ形境界条件を挿入
+					if(a%3==2) temp.boundary=23;
+					else if(a%3==1) temp.boundary=22;
+					else if(a%3==0) temp.boundary=21;
+				}
+				else temp.boundary=0;
+				NODEc.push_back(temp);
+				temp.id+=1;
 			}
 		}
 	}
@@ -1810,7 +1847,7 @@ void tetgen_function::SetCOILBoundary(mpsconfig &CON, tetgen_config &TET, vector
 				temp.boundary=0;
 				NODEc.push_back(temp);
 				temp.id+=1;
-				}
+			}
 			else {
 				temp.r[A_X]=r*sin(theta*PI/180.0);
 				temp.r[A_Y]=r*cos(theta*PI/180.0);	
@@ -1825,7 +1862,7 @@ void tetgen_function::SetCOILBoundary(mpsconfig &CON, tetgen_config &TET, vector
 	}//*/
 
 	//.stlファイル読み取り
-//	in.load_stl("COIL");
+	//	in.load_stl("COIL");
 	//nodeファイル作成
 	MakeNodeFile(CON, NODEc, "COIL.node");
 	//.nodeファイル読み取り
@@ -1833,41 +1870,41 @@ void tetgen_function::SetCOILBoundary(mpsconfig &CON, tetgen_config &TET, vector
 
 	//まずは流体節点のみで分割
 	tetrahedralize("", &in, &out);
-		// i 要素内へ節点を追加(今の所無くても機能している)
-		// f .faceファイルに境界ではない面も含める
-		// e .edgeファイルの出力(ONにするとなぜか止まってしまう)
-		// n .neighファイルの出力
+	// i 要素内へ節点を追加(今の所無くても機能している)
+	// f .faceファイルに境界ではない面も含める
+	// e .edgeファイルの出力(ONにするとなぜか止まってしまう)
+	// n .neighファイルの出力
 	//出力
 	out.save_nodes("COIL_whole");
 	out.save_elements("COIL_whole");
 	out.save_faces("COIL_whole");
 	//////////////////ここまでで流体節点のみを使って、すべての要素が繋がった凸なメッシュができた(fluid_wholeで確認可能)*/
 	//要素材質の決定
-//	Geteleattribute(NODEc,ELEMc, out);
+	//	Geteleattribute(NODEc,ELEMc, out);
 	///////////////不要な要素の削除
 
 	//.nodeの取得
-//	GetPointList(NODEc, in, out);
+	//	GetPointList(NODEc, in, out);
 	//.eleの取得
-//	GetTetrahedronList(ELEMc, in, out);
+	//	GetTetrahedronList(ELEMc, in, out);
 	//長い要素の除去
-//	DelThinTetrahedron(CON, TET, NODEc, ELEMc, in, out);
+	//	DelThinTetrahedron(CON, TET, NODEc, ELEMc, in, out);
 
 	//節点-要素関係
-//	SetRelation_NodeElem(CON, NODEc, ELEMc);
+	//	SetRelation_NodeElem(CON, NODEc, ELEMc);
 	//要素-要素関係
-//	SetRelation_ElemElem(CON, NODEc, ELEMc);
+	//	SetRelation_ElemElem(CON, NODEc, ELEMc);
 	//境界面データ取得
 	GetFacetList(FACEc, in, out, COIL);
 
-/*	/////////////////要素確認用ファイル///////////////////////////////////
+	/*	/////////////////要素確認用ファイル///////////////////////////////////
 	out.save_nodes("boundary_COIL");	//fluid.2.nodeと同じファイル
 	MakeElemFile(CON, ELEMc, "boundary_COIL.ele");
 	MakeFaceFile(CON, FACEc, "boundary_COIL.face");
 	////////////////ここまででエラストマーのメッシュが切れた//////////////////////*/
 
 	//境界面データ取得
-//	GetFacetList(FACEc, in, out, MAGNET);
+	//	GetFacetList(FACEc, in, out, MAGNET);
 }
 
 void tetgen_function::SetIRONBoundary(mpsconfig &CON, tetgen_config &TET, vector<tetgen_node> &NODEi, vector<tetgen_facet> &FACEi)
@@ -1911,7 +1948,7 @@ void tetgen_function::SetIRONBoundary(mpsconfig &CON, tetgen_config &TET, vector
 				temp.r[A_Z]=Zmin+divL[A_Z]*k;
 				temp.attribute=IRON;				
 				temp.boundary=0;			//境界条件
-			
+
 				if(fabs(theta2)>0.0175)//doubleを0と比較してはいけない（一致するわけがない）
 				{
 					double XX=temp.r[A_X];
@@ -1936,21 +1973,21 @@ void tetgen_function::SetIRONBoundary(mpsconfig &CON, tetgen_config &TET, vector
 					temp.r[A_X]=r*cos(theta);
 					temp.r[A_Y]=r*sin(theta);
 					temp.r[A_Z]=Zmin+divL[A_Z]*k;
-					
+
 					temp.attribute=IRON;	
 					temp.boundary=0;			//境界条件
 
-		//			temp.attribute=IRON;
-		//			 if((n==divN[A_R]) && (k%3==0))temp.boundary=23;//外周側面
-		//			else if((n==divN[A_R]) && (k%3==1))temp.boundary=22;
-		//			else if((n==divN[A_R]) && (k%3==2))temp.boundary=21;
-		/*			else if((n==6) && (k%3==0)) NODE[num].boundary_condition=21;	//鉄心との境界面
+					//			temp.attribute=IRON;
+					//			 if((n==divN[A_R]) && (k%3==0))temp.boundary=23;//外周側面
+					//			else if((n==divN[A_R]) && (k%3==1))temp.boundary=22;
+					//			else if((n==divN[A_R]) && (k%3==2))temp.boundary=21;
+					/*			else if((n==6) && (k%3==0)) NODE[num].boundary_condition=21;	//鉄心との境界面
 					else if((n==6) && (k%3==1))NODE[num].boundary_condition=22;
 					else if((n==6) && (k%3==2))NODE[num].boundary_condition=23;  */
 					/*temp.boundary=0;*/			//境界条件
-	
+
 					if(fabs(theta2)>0.0175)//磁石が傾いている場合(1degより大きい場合)・・・doubleを0と比較してはいけない
-					//if(theta2!=0)これはダメ！！
+						//if(theta2!=0)これはダメ！！
 					{
 						double XX=temp.r[A_X];
 						double ZZ=temp.r[A_Z]-CON.get_magnet_Z();
@@ -1973,10 +2010,10 @@ void tetgen_function::SetIRONBoundary(mpsconfig &CON, tetgen_config &TET, vector
 
 	//まずは流体節点のみで分割
 	tetrahedralize("", &in, &out);
-		// i 要素内へ節点を追加(今の所無くても機能している)
-		// f .faceファイルに境界ではない面も含める
-		// e .edgeファイルの出力(ONにするとなぜか止まってしまう)
-		// n .neighファイルの出力
+	// i 要素内へ節点を追加(今の所無くても機能している)
+	// f .faceファイルに境界ではない面も含める
+	// e .edgeファイルの出力(ONにするとなぜか止まってしまう)
+	// n .neighファイルの出力
 
 	//出力
 	out.save_nodes("IRON_whole");
@@ -1984,7 +2021,7 @@ void tetgen_function::SetIRONBoundary(mpsconfig &CON, tetgen_config &TET, vector
 
 	//////////////////ここまでで流体節点のみを使って、すべての要素が繋がった凸なメッシュができた(fluid_wholeで確認可能)*/
 	//要素材質の決定
-//	Geteleattribute(NODEc,ELEMc, out);
+	//	Geteleattribute(NODEc,ELEMc, out);
 	///////////////不要な要素の削除
 
 	//.nodeの取得
@@ -1993,7 +2030,7 @@ void tetgen_function::SetIRONBoundary(mpsconfig &CON, tetgen_config &TET, vector
 	GetTetrahedronList(ELEMi, in, out);
 
 	//長い要素の除去
-//	DelThinTetrahedron(CON, TET, NODEc, ELEMc, in, out);
+	//	DelThinTetrahedron(CON, TET, NODEc, ELEMc, in, out);
 
 	//節点-要素関係
 	SetRelation_NodeElem(CON, NODEi, ELEMi);
@@ -2009,14 +2046,14 @@ void tetgen_function::SetIRONBoundary(mpsconfig &CON, tetgen_config &TET, vector
 	////////////////ここまででエラストマーのメッシュが切れた//////////////////////*/
 
 	//境界面データ取得
-//	GetFacetList(FACEc, in, out, MAGNET);
+	//	GetFacetList(FACEc, in, out, MAGNET);
 }
 
 //境界節点・境界面データの結合
 void tetgen_function::UniteBoundaryData(mpsconfig &CON, 
-					   vector<tetgen_node> &NODE, vector<tetgen_node> &NODEa1, vector<tetgen_node> &NODEa2, vector<tetgen_node> &NODEp, vector<tetgen_node> &NODEc, vector<tetgen_node> &NODEb, vector<tetgen_node> &NODEw, 
-					   vector<tetgen_facet> &FACE, vector<tetgen_facet> &FACEa1, vector<tetgen_facet> &FACEa2, vector<tetgen_facet> &FACEp, vector<tetgen_facet> &FACEc, vector<tetgen_facet> &FACEb, vector<tetgen_facet> &FACEw, 
-					   vector<int> &TRANS)
+										vector<tetgen_node> &NODE, vector<tetgen_node> &NODEa1, vector<tetgen_node> &NODEa2, vector<tetgen_node> &NODEp, vector<tetgen_node> &NODEc, vector<tetgen_node> &NODEb, vector<tetgen_node> &NODEw, 
+										vector<tetgen_facet> &FACE, vector<tetgen_facet> &FACEa1, vector<tetgen_facet> &FACEa2, vector<tetgen_facet> &FACEp, vector<tetgen_facet> &FACEc, vector<tetgen_facet> &FACEb, vector<tetgen_facet> &FACEw, 
+										vector<int> &TRANS)
 {
 	cout<<"境界節点・境界面データの結合"<<endl;
 
@@ -2215,7 +2252,7 @@ void tetgen_function::SetTRANS(vector<tetgen_node> &NODE, vector<int> &TRANS)
 void tetgen_function::DecisionAttribute(vector<tetgen_node> &NODE, vector<tetgen_element> &ELEM, tetgenio &in, tetgenio &out)
 {
 	double M[4];	//節点の材質を格納
-	
+
 	for(int i=0;i<(int)ELEM.size();i++)
 	{	
 		if(ELEM[i].attribute==AIR)
@@ -2324,9 +2361,9 @@ void tetgen_function::ModifyAttribute_tetgenio(mpsconfig &CON, tetgen_config &TE
 
 	if(CON.get_model_number()==2)
 	{
-			for(int i=0;i<out.numberofpoints;i++){
-	if(out.pointattributelist[i]==FACE_P) out.pointattributelist[i]=MAGELAST;//要素を戻す
-	}
+		for(int i=0;i<out.numberofpoints;i++){
+			if(out.pointattributelist[i]==FACE_P) out.pointattributelist[i]=MAGELAST;//要素を戻す
+		}
 		for(int i=0;i<out.numberoftetrahedra;i++)
 		{
 			/////////////////要素を作る点の要素/////////////////////////
@@ -2335,11 +2372,11 @@ void tetgen_function::ModifyAttribute_tetgenio(mpsconfig &CON, tetgen_config &TE
 			int ci=(int)out.pointattributelist[out.tetrahedronlist[4*i+2]];
 			int di=(int)out.pointattributelist[out.tetrahedronlist[4*i+3]];
 			////////////////////////////////////////////////////////////
-			
+
 			if(ai==bi && bi==ci && ci==di) out.tetrahedronattributelist[i]=di;//すべて同じ素材なら要素もその素材
-			
-	//		if(ai==AIR || bi==AIR || ci==AIR || di==AIR) out.tetrahedronattributelist[i]=AIR;//ひとつでも空気接点を含んでいるなら空気	//これを入れるとMRE中に空気要素ができる
-			
+
+			//		if(ai==AIR || bi==AIR || ci==AIR || di==AIR) out.tetrahedronattributelist[i]=AIR;//ひとつでも空気接点を含んでいるなら空気	//これを入れるとMRE中に空気要素ができる
+
 		}
 		for(int i=0;i<out.numberoftetrahedra;i++)
 		{
@@ -2349,8 +2386,8 @@ void tetgen_function::ModifyAttribute_tetgenio(mpsconfig &CON, tetgen_config &TE
 	else
 	{
 		for(int i=0;i<out.numberofpoints;i++){
-	if(out.pointattributelist[i]==FACE_P) out.pointattributelist[i]=MAGELAST;//要素を戻す
-	}
+			if(out.pointattributelist[i]==FACE_P) out.pointattributelist[i]=MAGELAST;//要素を戻す
+		}
 		for(int i=0;i<out.numberoftetrahedra;i++)
 		{
 			/////////////////要素を作る点の要素/////////////////////////
@@ -2359,34 +2396,34 @@ void tetgen_function::ModifyAttribute_tetgenio(mpsconfig &CON, tetgen_config &TE
 			int ci=(int)out.pointattributelist[out.tetrahedronlist[4*i+2]];
 			int di=(int)out.pointattributelist[out.tetrahedronlist[4*i+3]];
 			////////////////////////////////////////////////////////////
-			
+
 			if(ai==bi && bi==ci && ci==di) out.tetrahedronattributelist[i]=di;//すべて同じ素材なら要素もその素材
-			
+
 			else if((ai==IRON || bi==IRON || ci==IRON || di==IRON) && !(ai==AIR || bi==AIR || ci==AIR || di==AIR)) {
 				out.tetrahedronattributelist[i]=IRON;//ひとつでも鉄接点を含んでいるなら,かつ空気をひとつも含んでないなら鉄
 			}
 			//if(ai==AIR || bi==AIR || ci==AIR || di==AIR) out.tetrahedronattributelist[i]=AIR;//ひとつでも空気接点を含んでいるなら空気	//これを入れるとMRE中に空気要素ができる
-			
+
 		}
 		for(int i=0;i<out.numberoftetrahedra;i++)
 		{
 			if(out.tetrahedronattributelist[i]==0) out.tetrahedronattributelist[i]=AIR;
 		}
-/*		//色の調整　小さい順に赤・緑・青・黄色 これすると解析が回らない　メッシュ材料にこの値が使用されるため
+		/*		//色の調整　小さい順に赤・緑・青・黄色 これすると解析が回らない　メッシュ材料にこの値が使用されるため
 		for(int i=0;i<out.numberoftetrahedra;i++)
 		{
-			if(out.tetrahedronattributelist[i]==COIL) out.tetrahedronattributelist[i]=1;
-			else if(out.tetrahedronattributelist[i]==MAGELAST) out.tetrahedronattributelist[i]=2;
-			else if(out.tetrahedronattributelist[i]==AIR) out.tetrahedronattributelist[i]=3;
-			else if(out.tetrahedronattributelist[i]==IRON) out.tetrahedronattributelist[i]=4;
-			
+		if(out.tetrahedronattributelist[i]==COIL) out.tetrahedronattributelist[i]=1;
+		else if(out.tetrahedronattributelist[i]==MAGELAST) out.tetrahedronattributelist[i]=2;
+		else if(out.tetrahedronattributelist[i]==AIR) out.tetrahedronattributelist[i]=3;
+		else if(out.tetrahedronattributelist[i]==IRON) out.tetrahedronattributelist[i]=4;
+
 		}*/
 	}
 
 	//自動追加された節点ののattributeとboundary_markerの修正
 	//この時点では流体内部や電極内部や電極内部の節点は空気節点になっているのでそれぞれの材質に修正する
 	//※電極の一番上の節点は電極の節点とするため、先に水の節点決めてから電極節点を決める
-	
+
 	if(CON.get_model_number()==2)
 	{
 		for(int i=0;i<out.numberoftetrahedra;i++)
@@ -2398,11 +2435,11 @@ void tetgen_function::ModifyAttribute_tetgenio(mpsconfig &CON, tetgen_config &TE
 					out.pointattributelist[out.tetrahedronlist[i*4+n]]=MAGNET;
 					out.pointmarkerlist[out.tetrahedronlist[i*4+n]]=MAGNET;
 				}
-			//	//材質はELECTRODEに戻しておく
-			//	out.tetrahedronattributelist[i]=ELECTRODE;
+				//	//材質はELECTRODEに戻しておく
+				//	out.tetrahedronattributelist[i]=ELECTRODE;
 			}
 		}
-		
+
 	}
 }
 

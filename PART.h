@@ -32,6 +32,7 @@ public:
 	double ang_u_temp[DIMENSION];
 	double P;				//ˆ³—Í
 	double volumetric_strain;//‘ÌÏ‚Ğ‚¸‚İ
+	double volumetric_strain_z;//‘ÌÏ‚Ğ‚¸‚İ
 
 	double p[DIMENSION];	//•¨——Ê
 

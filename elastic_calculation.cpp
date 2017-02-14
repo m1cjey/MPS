@@ -70,7 +70,7 @@ void calc_elastic(vector<mpselastic> &PART, elastic &ELAST, int t, double **F)
 		calc_r0_ij(PART); 
 
 
-		calc_nonlinear_accel_for_3D_test(PART, ELAST);
+		calc_nonlinear_accel_for_3D(PART, ELAST);
 
 		//圧力と接触反力による加速度を計算
 		contact_judge(PART, ELAST);	
@@ -353,6 +353,7 @@ void calc_nonlinear_accel_for_3D_test(vector<mpselastic> &PART, elastic &ELAST)
 			double EE1_temp=0.0;
 			double EE2_temp=0.0;
 			double volumetric_strain=0.0;//体積ひずみ（iごとに異なる）
+			double volumetric_strain_z=0.0;//体積ひずみ（iごとに異なる）
 
 			//運動エネルギーの更新
 			if(PART[i].type==ELASTIC || PART[i].type==MAGELAST){
@@ -1397,7 +1398,7 @@ void calc_nonlinear_accel_for_3D(vector<mpselastic> &PART, elastic &ELAST)
 			double EE1_temp=0.0;
 			double EE2_temp=0.0;
 			double volumetric_strain=0.0; //体積ひずみ
-
+			double volumetric_strain_z=0.0; //体積ひずみ
 			//運動エネルギーの更新
 			for(int D=0;D<3;D++) KE+=PART[i].u[D]*PART[i].u[D];
 
@@ -1494,6 +1495,7 @@ void calc_nonlinear_accel_for_3D(vector<mpselastic> &PART, elastic &ELAST)
 
 				//圧力計算・・・e_vol_iのΣ[]（変位の発散）を計算
 					for(int D=0;D<3;D++) volumetric_strain+=E_ij[D]*n_ij[D]*w; //体積ひずみ計算の準備
+					volumetric_strain_z+=E_ij[A_Z]*n_ij[A_Z]*w;
 					PART[i].P+=volumetric_strain*lambda;
 					EE2_temp+=PART[i].P*volumetric_strain;
 					//PART[i].P*=w;・・・何故かこれだとうまくいかない・・・wが累乗で足されるので当たり前((()*w+smt)*w+smt)*w...
@@ -1545,7 +1547,11 @@ void calc_nonlinear_accel_for_3D(vector<mpselastic> &PART, elastic &ELAST)
 
 			PART[i].P*=-dimension/PART[i].PND;//体積ひずみによる圧力が求められた（これはエネルギー計算する前に求めておくこと）
 			volumetric_strain*=-dimension/PART[i].PND;//体積ひずみが求められた（これはエネルギー計算する前に求めておくこと）
+			volumetric_strain_z*=-dimension/PART[i].PND;//体積ひずみが求められた（これはエネルギー計算する前に求めておくこと）
+
 			PART[i].volumetric_strain=volumetric_strain;
+			PART[i].volumetric_strain_z=volumetric_strain_z;
+
 			//接触判定（下壁も含む）・・・ここで減衰を入れないとエラー？
 			//加速度計算はELASTICだけ考えればよいのでif(.type==ELASTIC)のループの中に入れても変わらない
 //			double n00=PART[i].PND0;

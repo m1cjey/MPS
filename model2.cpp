@@ -67,7 +67,7 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 	double le=CON->get_distancebp();	//初期粒子間距離*0.8 le=0.001
 	double A=sqrt(3.0)*0.5;				//よく使う係数(√3)/2
 	double B=sqrt(2.0/3);				//よく使う係数√(2/3)
-	
+
 
 	vector<double> X;
 	vector<double> Y;
@@ -93,23 +93,23 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 	vector<double> Y5;
 	vector<double> Z5;
 	vector<int> surface5;			//ONなら表面　OFFなら内部
-	
+
 	vector<double> X6;					//使い回し用　弾丸1用
 	vector<double> Y6;
 	vector<double> Z6;
-	
+
 	ofstream fq("initial_input.dat");
 
 	cout<<model<<endl;
 	//////////////////モデル1　球体//////////////////////////
-	 if(model==1)
+	if(model==1)
 	{
 		double R=CON->get_R1();			//作成する円の半径
 		double Zg=R+5.2*le+10*le;					//球の中心高さ
 		if(dimension==2)
 		{
 			set_circle_edge(X,Y,Z,&number,le,R);//円外周
-			
+
 			//set_circle_in(X,Y,Z,type1,&number,le,R,0,number);////円内部  vector配列は参照渡ししている
 			set_circle_in_using_6_pieces(X,Y,Z,&number,le,R,0,number);//円内部    vector配列は参照渡ししている
 		}
@@ -135,15 +135,15 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 			{
 				double r=sqrt(X[i]*X[i]+Y[i]*Y[i]);
 				double a=0.2;
-		//		a=500*3;//クーロン分裂のとき
+				//		a=500*3;//クーロン分裂のとき
 				a=200;	//遊び
-				
-				
+
+
 				vx=-0.5*a*X[i];
 				vy=-0.5*a*Y[i];
 				vz=a*Z[i];
-				 
-			//	writedata2(fq,  i,X[i],Y[i],Z[i]+Zg,MAGELAST,1, OFF,val, vx,vy, vz,0,0,0,0, 0, 0);
+
+				//	writedata2(fq,  i,X[i],Y[i],Z[i]+Zg,MAGELAST,1, OFF,val, vx,vy, vz,0,0,0,0, 0, 0);
 				writedata2(fq,  i,X[i],Y[i],Z[i]+Zg,MAGELAST,1,1,val, 0,0, 0,0,0,0,0, 0, 1);
 			}
 			//for(int i=0;i<number;i++) if(fabs(Z[i])<0.001) writedata2(fq,  i,X[i],Y[i],Z[i]+Zg,FLUID,1, OFF,0, 0,0, 0, 0, 0, ON);
@@ -168,7 +168,7 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 			for(int i=numw;i<number;i++){
 				if(Z[i]>=Height/2){
 					ii++;
-				writedata2(fq,ii,X[i], Y[i], Z[i]+3*le-Height,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
+					writedata2(fq,ii,X[i], Y[i], Z[i]+3*le-Height,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
 				}
 			}
 			number=ii;
@@ -181,7 +181,7 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 				//a*=3;
 				vx=-a*X[i];
 				vy=a*Y[i];
-		
+
 				writedata2(fq,  i,X[i],Y[i]+Zg,Z[i],ELASTIC,1, OFF,val,vx,vy, vz,0,0,0, 0, 0,0);
 			}
 		}
@@ -202,8 +202,8 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 			int circle_start_id=0; 
 			set_circle_edge(X,Y,Z,&number,le,R);//円外周　これがないと内部も作れない
 			set_circle_in_using_6_pieces(X,Y,Z,&number,le,R,0,number);//円内部    vector配列は参照渡ししている
-//			set_circle_edge(X,Y,Z,&number,le,R, height);//円外周　これがないと内部も作れない
-//			set_circle_in_using_6_pieces(X,Y,Z,&number,le,R,height,0,number);//円内部    vector配列は参照渡ししている
+			//			set_circle_edge(X,Y,Z,&number,le,R, height);//円外周　これがないと内部も作れない
+			//			set_circle_in_using_6_pieces(X,Y,Z,&number,le,R,height,0,number);//円内部    vector配列は参照渡ししている
 			int circle_end_id=number;	//円の粒子idを記憶
 			////////
 
@@ -218,10 +218,10 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 			set_cylinder_in(X,Y,Z,&number,le,R,height,1,circle_start_id);//内部にパッキング
 
 			int beforeNumber=number;
-			
+
 			//円柱表面+下壁の書き込み
 			for(int i=face_n;i<number;i++) {
-				 writedata2(fq,i,X[i],Z[i]-height/2,Y[i],TERMINAL1,1,0,0,0,0,vz,0,0,0,0,0,1);
+				writedata2(fq,i,X[i],Z[i]-height/2,Y[i],TERMINAL1,1,0,0,0,0,vz,0,0,0,0,0,1);
 			}
 			//下壁
 			//double Width=27*le;
@@ -243,9 +243,9 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 			for(int i=beforeNumber;i<number;i++){
 				if(Z[i]>=Height/2){
 					ii++;
-				writedata2(fq,ii,X[i], Y[i], Z[i]-R-Height-4*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
+					writedata2(fq,ii,X[i], Y[i], Z[i]-R-Height-4*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
 				}
-		}
+			}
 			number=ii;
 			//床上面の位置
 			double ground=Z[beforeNumber]-R-Height-4*le;
@@ -260,13 +260,13 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 
 	//////////////////////////////////////モデル　3　立方体///////////////////////////////////////////////////////////
 	else if(model==3){
-	if(dimension==2)
+		if(dimension==2)
 		{
 			double origin[3]={0,0,0};//四角形の左下の点の座標
 			double Width=CON->get_fluidwidth()*le;				//水平方向長さ
 			double Height=CON->get_fluidwidth()*le;				//垂直方向長さ
 			set_rectangular(X,Y,Z,&number,le,Width,Height);		//座標の原点は長方形の中心。よってあとで移動すること。
-			
+
 			//初期情報書き込み
 			for(int i=0;i<number;i++) writedata2(fq,i,0.5*Width+origin[A_X]+X[i],Height+origin[A_Y]+Y[i],Z[i],MAGELAST,1,0,0,0,0,0,0,0,0,0,0,0);
 
@@ -285,8 +285,8 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 			}
 			for(int i=number;i<number*2;i++) writedata2(fq,i,X[i],Y[i]-Depth/2,Z[i]+Height+3*le,TERMINAL2,1, OFF,0, 0,0, -0.2, 0,0,0,0, 0, 0);
 			number=number*2;
-		
-				//下壁
+
+			//下壁
 			//double Width=27*le;
 			double Rw=CON->get_fluidwidth()*le*1.8;
 			double Heightw=6*le;
@@ -305,16 +305,16 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 			for(int i=num3;i<number;i++){
 				if(Z[i]>=Height/2){
 					ii++;
-				writedata2(fq,ii,X[i], Y[i], Z[i]-Heightw-4*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
+					writedata2(fq,ii,X[i], Y[i], Z[i]-Heightw-4*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
 				}
-				
-		}
+
+			}
 			number=ii;
 			cout<<"333"<<endl;
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	////////////////////////////////////モデル　4　試験片///////////////////////////////////////////////////////////////////
 	else if(model==4){
 		int length=25;	//[mm]引っ張り端子とは別35
@@ -323,7 +323,7 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 		int tan=0;//端子高さ粒子5
 		double accel=0.005;
 		le*=0.5;//*(11.0/12.0)
-		
+
 		////////////下端子////////////
 		for(int i=0;i<tan;i++){
 			for(int j=0;j<width;j++){
@@ -362,7 +362,7 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 			}
 		}
 		////////////////////////////////
-		
+
 		for(int i=0;i<number;i++){ 
 			if(i<low)writedata2(fq,i,X[i]-depth*le/2,Y[i]-width*le/2,Z[i]-(length+10)*le/2,WALL,0, OFF,0, 0, 0, -accel, 0,0,0,0, 0, 0);
 			else if(i>=low && i<mid)writedata2(fq,i,X[i]-depth*le/2,Y[i]-width*le/2,Z[i]-(length+10)*le/2,MAGELAST,0, OFF,0, 0,0, 0,0,0,0, 0, 0, 0);
@@ -373,27 +373,27 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 	///////////////////////////////モデル　6　アクチュエータ////////////////////////////////////////////////////////////////
 	else if(model==6)
 	{
-	double elast_r=0.0125;		//2.5cm
-	double elast_h=0.03;		//3.0cm
-	double mag_r=0.015;			//3.0cm
-	double mag_h=0.04;			//4.0cm
+		double elast_r=0.0125;		//2.5cm
+		double elast_h=0.03;		//3.0cm
+		double mag_r=0.015;			//3.0cm
+		double mag_h=0.04;			//4.0cm
 
-	int start_ID=0;
-	set_circle_edge(X,Y,Z,&number,le,mag_r);//円外周　これがないと内部も作れない
-	set_circle_in_using_6_pieces(X,Y,Z,&number,le,mag_r,start_ID,number);//円内部    vector配列は参照渡ししている
-	int circle_ID=number;			//円の粒子数　粒子IDはstart_IDからcircle_ID-1まで
+		int start_ID=0;
+		set_circle_edge(X,Y,Z,&number,le,mag_r);//円外周　これがないと内部も作れない
+		set_circle_in_using_6_pieces(X,Y,Z,&number,le,mag_r,start_ID,number);//円内部    vector配列は参照渡ししている
+		int circle_ID=number;			//円の粒子数　粒子IDはstart_IDからcircle_ID-1まで
 
-	int top_flag=ON;		//円柱の上面も作成するからフラグをON
-	set_cylinder_face(X,Y,Z,&number,le,mag_r,mag_h,start_ID,circle_ID,top_flag);//円柱表面座標作成
-	int face_n=number;
-	for(int s=0;s<face_n;s++){
-		writedata2(fq,s,X[s],Y[s],Z[s]-(mag_h/2),MAGELAST,1,1,0,0,0,0,0,0,0,0,0,1);//粒子は,FACE
-	}
-	set_cylinder_in(X,Y,Z,&number,le,mag_r,mag_h,1,start_ID);//内部にパッキング
-	int cylinder_ID=number;
+		int top_flag=ON;		//円柱の上面も作成するからフラグをON
+		set_cylinder_face(X,Y,Z,&number,le,mag_r,mag_h,start_ID,circle_ID,top_flag);//円柱表面座標作成
+		int face_n=number;
+		for(int s=0;s<face_n;s++){
+			writedata2(fq,s,X[s],Y[s],Z[s]-(mag_h/2),MAGELAST,1,1,0,0,0,0,0,0,0,0,0,1);//粒子は,FACE
+		}
+		set_cylinder_in(X,Y,Z,&number,le,mag_r,mag_h,1,start_ID);//内部にパッキング
+		int cylinder_ID=number;
 
-	number=face_n;//粒子数のリセット
-	for(int i=face_n;i<cylinder_ID;i++)
+		number=face_n;//粒子数のリセット
+		for(int i=face_n;i<cylinder_ID;i++)
 		{
 			if((X[i]*X[i]+Y[i]*Y[i]<=pow(0.008,2) && Z[i]>0.012 && Z[i]<0.016+0.012)){
 				if(X[i]*X[i]+Y[i]*Y[i]<=pow(0.005,2) && Z[i]>0.015 && Z[i]<0.010+0.015){;}//真ん中をくりぬく
@@ -409,16 +409,16 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 			else {
 				writedata2(fq,i,X[i],Y[i],Z[i]-(mag_h/2),MAGELAST,1,0,0,0,0,0,0,0,0,0,0,1);//粒子はMAGELAST
 				number++;
-				}
+			}
 		}
 
-	//床上面の位置
-			double ground=Z[number]-(elast_h/2)-10*le-2*le;
-			for(int i=cylinder_ID;i<number;i++)
-			{
-				if((Z[i]-(elast_h/2)-10*le-2*le)>ground) ground=Z[i]-(elast_h/2)-10*le-2*le;
-			}
-			CON->set_ground_position(ground);
+		//床上面の位置
+		double ground=Z[number]-(elast_h/2)-10*le-2*le;
+		for(int i=cylinder_ID;i<number;i++)
+		{
+			if((Z[i]-(elast_h/2)-10*le-2*le)>ground) ground=Z[i]-(elast_h/2)-10*le-2*le;
+		}
+		CON->set_ground_position(ground);
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -431,65 +431,65 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 		double MRE_h=0.004;//[m]
 		double silicone_h=0.006;
 		double under=0;//-le*24
-	////////////////////////////MRE///////////////////////////////
-	int start_ID=0;
-	set_circle_edge(X,Y,Z,&number,le,r);//円外周　これがないと内部も作れない
-	set_circle_in_using_6_pieces(X,Y,Z,&number,le,r,start_ID,number);//円内部    vector配列は参照渡ししている
-	int circle_ID=number;			//円の粒子数　粒子IDはstart_IDからcircle_ID-1まで
+		////////////////////////////MRE///////////////////////////////
+		int start_ID=0;
+		set_circle_edge(X,Y,Z,&number,le,r);//円外周　これがないと内部も作れない
+		set_circle_in_using_6_pieces(X,Y,Z,&number,le,r,start_ID,number);//円内部    vector配列は参照渡ししている
+		int circle_ID=number;			//円の粒子数　粒子IDはstart_IDからcircle_ID-1まで
 
-	int top_flag=ON;		//円柱の上面も作成するからフラグをON
-	set_cylinder_face(X,Y,Z,&number,le,r,MRE_h,start_ID,circle_ID,top_flag);//円柱表面座標作成
-	int surface=number;
-	for(int i=start_ID;i<surface;i++){
-		writedata2(fq,i,X[i],Y[i],Z[i]+under+silicone_h+1.5*le,MAGELAST,1,1,0,0,0,0,0,0,0,0,0,1);//粒子はMAGELAST
-	}
-	///内部パッキン
-	set_cylinder_in(X,Y,Z,&number,le,r,MRE_h,1,start_ID);
-	int cylinder_ID=number;
-
-	for(int i=surface;i<cylinder_ID;i++){
-		writedata2(fq,i,X[i],Y[i],Z[i]+under+silicone_h+1.5*le,MAGELAST,1,0,0,0,0,0,0,0,0,0,0,1);//粒子はMAGELAST
-	}
-	///////////////////////////////////////////////////////////////////
-
-	///////////////////////////シリコーン///////////////////////////////
-	int start2_ID=number;
-	set_circle_edge(X,Y,Z,&number,le,r);//円外周　これがないと内部も作れない
-	set_circle_in_using_6_pieces(X,Y,Z,&number,le,r,start2_ID,number);//円内部    vector配列は参照渡ししている
-	int circle2_ID=number;			//円の粒子数　粒子IDはstart_IDからcircle_ID-1まで
-
-			//円柱の上面も作成するからフラグをON
-	set_cylinder_face(X,Y,Z,&number,le,r,silicone_h,start2_ID,circle2_ID,top_flag);//円柱表面座標作成
-	set_cylinder_in(X,Y,Z,&number,le,r,silicone_h,1,start2_ID);//内部にパッキング
-	int cylinder2_ID=number;
-
-	for(int i=cylinder_ID;i<cylinder2_ID;i++){
-		writedata2(fq,i,X[i],Y[i],Z[i]+under,ELASTIC,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はELASTIC
-	}
-	///////////////////////////////////////////////////////////
-		//下壁
-			int num3=number;
-			double mdis=le; //*0.5
-			set_circle_edge(X,Y,Z,&number,mdis,Wr);//円外周　これがないと内部も作れない
-			set_circle_in_using_6_pieces(X,Y,Z,&number,mdis,Wr,num3,number);//円内部    vector配列は参照渡ししている　//0をnum3に変更
-			int end_id=number;	//円の粒子idを記憶
-
-			int topw_flag=ON;		//円柱の上面も作成するからフラグをON
-			set_cylinder_face(X,Y,Z,&number,mdis,Wr,Wh,num3,end_id,topw_flag);//円柱表面座標作成
-			set_cylinder_in(X,Y,Z,&number,mdis,Wr,Wh,1,num3);//内部にパッキング　　　//最後にint num3(壁の最初の粒子数)を加える．MD_3Dで必要
-		
-			for(int i=num3;i<number;i++){
-				writedata2(fq,i,X[i], Y[i], Z[i]-Wh-1.5*le+under,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
+		int top_flag=ON;		//円柱の上面も作成するからフラグをON
+		set_cylinder_face(X,Y,Z,&number,le,r,MRE_h,start_ID,circle_ID,top_flag);//円柱表面座標作成
+		int surface=number;
+		for(int i=start_ID;i<surface;i++){
+			writedata2(fq,i,X[i],Y[i],Z[i]+under+silicone_h+1.5*le,MAGELAST,1,1,0,0,0,0,0,0,0,0,0,1);//粒子はMAGELAST
 		}
-			
-			//床上面の位置
-			double ground=Z[num3]-Wh-1.5*le+under;
-			for(int i=num3;i<number;i++)
-			{
-				if((Z[i]-Wh-1.5*le+under)>ground) ground=Z[i]-Wh-1.5*le+under;
-			}
-			CON->set_ground_position(ground);
-			
+		///内部パッキン
+		set_cylinder_in(X,Y,Z,&number,le,r,MRE_h,1,start_ID);
+		int cylinder_ID=number;
+
+		for(int i=surface;i<cylinder_ID;i++){
+			writedata2(fq,i,X[i],Y[i],Z[i]+under+silicone_h+1.5*le,MAGELAST,1,0,0,0,0,0,0,0,0,0,0,1);//粒子はMAGELAST
+		}
+		///////////////////////////////////////////////////////////////////
+
+		///////////////////////////シリコーン///////////////////////////////
+		int start2_ID=number;
+		set_circle_edge(X,Y,Z,&number,le,r);//円外周　これがないと内部も作れない
+		set_circle_in_using_6_pieces(X,Y,Z,&number,le,r,start2_ID,number);//円内部    vector配列は参照渡ししている
+		int circle2_ID=number;			//円の粒子数　粒子IDはstart_IDからcircle_ID-1まで
+
+		//円柱の上面も作成するからフラグをON
+		set_cylinder_face(X,Y,Z,&number,le,r,silicone_h,start2_ID,circle2_ID,top_flag);//円柱表面座標作成
+		set_cylinder_in(X,Y,Z,&number,le,r,silicone_h,1,start2_ID);//内部にパッキング
+		int cylinder2_ID=number;
+
+		for(int i=cylinder_ID;i<cylinder2_ID;i++){
+			writedata2(fq,i,X[i],Y[i],Z[i]+under,ELASTIC,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はELASTIC
+		}
+		///////////////////////////////////////////////////////////
+		//下壁
+		int num3=number;
+		double mdis=le; //*0.5
+		set_circle_edge(X,Y,Z,&number,mdis,Wr);//円外周　これがないと内部も作れない
+		set_circle_in_using_6_pieces(X,Y,Z,&number,mdis,Wr,num3,number);//円内部    vector配列は参照渡ししている　//0をnum3に変更
+		int end_id=number;	//円の粒子idを記憶
+
+		int topw_flag=ON;		//円柱の上面も作成するからフラグをON
+		set_cylinder_face(X,Y,Z,&number,mdis,Wr,Wh,num3,end_id,topw_flag);//円柱表面座標作成
+		set_cylinder_in(X,Y,Z,&number,mdis,Wr,Wh,1,num3);//内部にパッキング　　　//最後にint num3(壁の最初の粒子数)を加える．MD_3Dで必要
+
+		for(int i=num3;i<number;i++){
+			writedata2(fq,i,X[i], Y[i], Z[i]-Wh-1.5*le+under,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
+		}
+
+		//床上面の位置
+		double ground=Z[num3]-Wh-1.5*le+under;
+		for(int i=num3;i<number;i++)
+		{
+			if((Z[i]-Wh-1.5*le+under)>ground) ground=Z[i]-Wh-1.5*le+under;
+		}
+		CON->set_ground_position(ground);
+
 	}
 	//////////////////////////////////////////モデル　8　アクチュエータ3////////////////////////////////////
 	else if(model==8){
@@ -498,27 +498,27 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 		double MRE_h=0.003;//[m]
 		double silicone_h=0.01;
 		double under=-le*24;
-	
-	///////////////////////////シリコーン///////////////////////////////
-	int start_ID=0;
-	set_circle_edge(X,Y,Z,&number,le,r);//円外周　これがないと内部も作れない
-	set_circle_in_using_6_pieces(X,Y,Z,&number,le,r,start_ID,number);//円内部    vector配列は参照渡ししている
-	int circle_ID=number;			//円の粒子数　粒子IDはstart_IDからcircle_ID-1まで
 
-	int top_flag=ON;		//円柱の上面も作成するからフラグをON		
-	set_cylinder_face(X,Y,Z,&number,le,r,silicone_h,start_ID,circle_ID,top_flag);//円柱表面座標作成
-	set_cylinder_in(X,Y,Z,&number,le,r,silicone_h,1,start_ID);//内部にパッキング
-	int cylinder2_ID=number;
+		///////////////////////////シリコーン///////////////////////////////
+		int start_ID=0;
+		set_circle_edge(X,Y,Z,&number,le,r);//円外周　これがないと内部も作れない
+		set_circle_in_using_6_pieces(X,Y,Z,&number,le,r,start_ID,number);//円内部    vector配列は参照渡ししている
+		int circle_ID=number;			//円の粒子数　粒子IDはstart_IDからcircle_ID-1まで
 
-	for(int i=0;i<cylinder2_ID;i++){
-		if(pow(X[i],2)+pow(Y[i]-MRE_r,2)<=pow(MRE_r,2) && (Z[i]>=silicone_h-MRE_h))
-		{
-			writedata2(fq,i,X[i],Y[i],Z[i]+under,MAGELAST,1,0,0,0,0,0,0,0,0,0,0,1);//粒子はELASTIC
+		int top_flag=ON;		//円柱の上面も作成するからフラグをON		
+		set_cylinder_face(X,Y,Z,&number,le,r,silicone_h,start_ID,circle_ID,top_flag);//円柱表面座標作成
+		set_cylinder_in(X,Y,Z,&number,le,r,silicone_h,1,start_ID);//内部にパッキング
+		int cylinder2_ID=number;
+
+		for(int i=0;i<cylinder2_ID;i++){
+			if(pow(X[i],2)+pow(Y[i]-MRE_r,2)<=pow(MRE_r,2) && (Z[i]>=silicone_h-MRE_h))
+			{
+				writedata2(fq,i,X[i],Y[i],Z[i]+under,MAGELAST,1,0,0,0,0,0,0,0,0,0,0,1);//粒子はELASTIC
+			}
+			else writedata2(fq,i,X[i],Y[i],Z[i]+under,ELASTIC,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はELASTIC
 		}
-		else writedata2(fq,i,X[i],Y[i],Z[i]+under,ELASTIC,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はELASTIC
-	}
-	///////////////////////////////////////////////////////////
-	//下壁
+		///////////////////////////////////////////////////////////
+		//下壁
 		//double Width=27*le;
 		double Rw=CON->get_fluidwidth()*le*1.5;
 		double Height=6*le;
@@ -531,7 +531,7 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 		int topw_flag=ON;		//円柱の上面も作成するからフラグをON
 		set_cylinder_face(X,Y,Z,&number,mdis,Rw,Height,num3,end_id,topw_flag);//円柱表面座標作成
 		set_cylinder_in(X,Y,Z,&number,mdis,Rw,Height,1,num3);//内部にパッキング　　　//最後にint num3(壁の最初の粒子数)を加える．MD_3Dで必要
-		
+
 		for(int i=num3;i<number;i++)
 		{
 			writedata2(fq,i,X[i], Y[i], Z[i]-Height-1.5*le+under,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
@@ -561,7 +561,7 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 		for(int wi=0;wi<Wid;wi++){
 			for(int hi=0;hi<Hei;hi++){
 				for(int di=0;di<Dep;di++){
-			//		if(wi==5)writedata2(fq,number,(wi*le)-Wid*le/2,(di*le)-Dep*le/2,(hi*le)+Height/2+2*le,MAGELAST,1, OFF,0, 0,0, -0.1, 0, 0, 0);
+					//		if(wi==5)writedata2(fq,number,(wi*le)-Wid*le/2,(di*le)-Dep*le/2,(hi*le)+Height/2+2*le,MAGELAST,1, OFF,0, 0,0, -0.1, 0, 0, 0);
 					writedata2(fq,number,(wi*le)-Wid*le/2,(di*le),(hi*le)+Height/2+2*le,MAGELAST,1, OFF,0, 0,0, 0, 0,0,0,0, 0, 0);
 					number++;
 				}
@@ -571,8 +571,8 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 		//重し
 		for(int i=0;i<Dep;i++){
 			for(int j=0;j<2;j++){
-			writedata2(fq,number,0.0,i*le,Height+(Hei+5+j)*le,WALL,1, OFF,0, 0, 0, -0.1,0,0,0, 0, 0, 0);
-			number++;
+				writedata2(fq,number,0.0,i*le,Height+(Hei+5+j)*le,WALL,1, OFF,0, 0, 0, -0.1,0,0,0, 0, 0, 0);
+				number++;
 			}
 		}
 
@@ -589,7 +589,7 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 					if(i==0)writedata2(fq,number,i*le,k*le,j*le,WALL,1, OFF,0, 0, 0, 0,0,0, 0, 0, 0, 0);
 					else if(i==(Length-1) && j==Height)writedata2(fq,number,i*le,k*le,j*le,MAGELAST,1, OFF,0, 0, 0, 0,0,0,0, 0, 0, 0);
 					else writedata2(fq,number,i*le,k*le,j*le,MAGELAST,1, OFF,0, 0, 0, 0, 0,0,0,0, 0, 0);
-				number++;
+					number++;
 				}
 			}
 		}
@@ -603,160 +603,160 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 		cout<<"耳の作成"<<endl;
 
 		int num=0;	//粒子数
-	 //左耳作成
-			set_circle_edge(X,Y,Z,&number,le,ear_R);//円外周
-			//set_circle_in(X,Y,Z,type1,&number,le,R,0,number);////円内部  vector配列は参照渡ししている
-			set_circle_in_using_6_pieces(X,Y,Z,&number,le,ear_R,0,number);//円内部    vector配列は参照渡ししている
+		//左耳作成
+		set_circle_edge(X,Y,Z,&number,le,ear_R);//円外周
+		//set_circle_in(X,Y,Z,type1,&number,le,R,0,number);////円内部  vector配列は参照渡ししている
+		set_circle_in_using_6_pieces(X,Y,Z,&number,le,ear_R,0,number);//円内部    vector配列は参照渡ししている
 
-			//球作成
-			int flag=FULL;
-			set_sphere(X,Y,Z,&number,le,ear_R,flag);
+		//球作成
+		int flag=FULL;
+		set_sphere(X,Y,Z,&number,le,ear_R,flag);
 
-			for(int i=0;i<X.size();i++){
-				X[i]=X[i]-spac/2;
-				Z[i]=Z[i]+ear_hi+10*le+CON->get_R1();
-			}
-			
-			for(int i=0;i<X.size();i++){
-//				if(sqrt(pow(X[i],2)+pow(Y[i],2)+pow(Z[i],2)) > face_R+0.1*le)
-				{
-				 X2.push_back(X[i]);
-				 Y2.push_back(Y[i]);
-				 Z2.push_back(Z[i]);
-				}
-			}
-			X.clear();
-			Y.clear();
-			Z.clear();
-			num+=(int)X2.size();
-		//右耳作成
-			int number2=0;
-			set_circle_edge(X,Y,Z,&number2,le,ear_R);//円外周
-			//set_circle_in(X,Y,Z,type1,&number,le,R,0,number);////円内部  vector配列は参照渡ししている
-			set_circle_in_using_6_pieces(X,Y,Z,&number2,le,ear_R,0,number2);//円内部    vector配列は参照渡ししている
-
-			//球作成
-			set_sphere(X,Y,Z,&number2,le,ear_R,flag);
-
-			
-			for(int i=0;i<X2.size();i++){
-				X[i]=X[i]+spac/2;
-				Z[i]=Z[i]+ear_hi+10*le+CON->get_R1();
-			}
-			for(int i=0;i<X.size();i++){
-//				if(sqrt(pow(X[i],2)+pow(Y[i],2)+pow(Z[i],2)) > face_R+0.1*le)
-				{
-				 X3.push_back(X[i]);
-				 Y3.push_back(Y[i]);
-				 Z3.push_back(Z[i]);
-				}
-			}
-			num+=(int)X3.size();
-			cout<<"顔の作成"<<endl;
-			 //顔作成
-			int number3=0;
-			set_circle_edge(X4,Y4,Z4,&number3,le,face_R);//円外周
-			//set_circle_in(X,Y,Z,type1,&number,le,R,0,number);////円内部  vector配列は参照渡ししている
-			set_circle_in_using_6_pieces(X4,Y4,Z4,&number3,le,face_R,0,number3);//円内部    vector配列は参照渡ししている.
-
-			//球作成
-			set_sphere(X4,Y4,Z4,&number3,le,face_R,flag);
-
-			for(int i=0;i<X4.size();i++){
-//				if(sqrt(pow(spac/2-X4[i],2)+pow(Y4[i],2)+pow(ear_hi+10*le+CON->get_re()-Z4[i],2)) > face_R-0.2*le && sqrt(pow(spac/2+X4[i],2)+pow(Y4[i],2)+pow(ear_hi+10*le+CON->get_re()-Z4[i],2)) > face_R-0.2*le)
-				surface3.push_back(0);
-			}
-			num+=(int)X4.size();
-			//合成
-//			make_fusion3D(X,Y,Z,X3,Y3,Z3,surface3,&num,le);
-//			make_fusion3D(X,Y,Z,X2,Y2,Z2,surface2,&num,le);
-			//出力
-			for(int i=0;i<X2.size();i++){
-				writedata2(fq,i,X2[i],Y2[i],Z2[i]+5*le,ELASTIC,1, 0,0, 0, 0, 0,0,0,0, 0, 0, 0);
-			}
-			for(int i=0;i<X3.size();i++){
-				writedata2(fq,i+X2.size(),X3[i],Y3[i],Z3[i]+5*le,ELASTIC,1, 0,0, 0, 0, 0,0,0,0, 0, 0,0);
-			}
-			for(int i=0;i<X4.size();i++){
-				writedata2(fq,i+X2.size()+X3.size(),X4[i],Y4[i],Z4[i]+10*le+CON->get_R1()+5*le,MAGELAST,1, 0,0, 0, 0, 0,0,0,0, 0, 0,1);
-			}
-			
-			number=num;//*/
-			cout<<"床の作成"<<endl;
-			//下壁
-			double Wr=20*le;//壁の半径
-			double Wh=6*le;//壁の高さ
-			int num3=num;
-			int number4=0;
-/*			double mdis=le; //*0.5
-			set_circle_edge(X5,Y5,Z5,&number4,mdis,Wr);//円外周　これがないと内部も作れない
-			set_circle_in_using_6_pieces(X5,Y5,Z5,&number4,mdis,Wr,0,number4);//円内部    vector配列は参照渡ししている　//0をnum3に変更
-			int end_id=number;	//円の粒子idを記憶
-
-			int topw_flag=ON;		//円柱の上面も作成するからフラグをON
-			set_cylinder_face(X5,Y5,Z5,&number4,mdis,Wr,Wh,0,end_id,topw_flag);//円柱表面座標作成
-			set_cylinder_in(X5,Y5,Z5,&number4,mdis,Wr,Wh,1,0);//内部にパッキング　　　//最後にint num3(壁の最初の粒子数)を加える．MD_3Dで必要
-		int ii=0;
-			for(int i=0;i<number4;i++){
-				if(Z5[i]>=Wh/2){
-				writedata2(fq,ii+num3,X5[i], Y5[i], Z5[i]-Wh-8*le-face_R/2,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
-				ii++;
-				}
+		for(int i=0;i<X.size();i++){
+			X[i]=X[i]-spac/2;
+			Z[i]=Z[i]+ear_hi+10*le+CON->get_R1();
 		}
-			number+=ii;//*/
-			int ii=0;
-			for(int i=0;i<30;i++){
-				for(int j=0;j<30;j++){
-					for(int k=0;k<3;k++){
-						writedata2(fq,ii+num3,i*le-(15*le), j*le-(15*le), k*le+6*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
-						ii++;
-					}
+
+		for(int i=0;i<X.size();i++){
+			//				if(sqrt(pow(X[i],2)+pow(Y[i],2)+pow(Z[i],2)) > face_R+0.1*le)
+			{
+				X2.push_back(X[i]);
+				Y2.push_back(Y[i]);
+				Z2.push_back(Z[i]);
+			}
+		}
+		X.clear();
+		Y.clear();
+		Z.clear();
+		num+=(int)X2.size();
+		//右耳作成
+		int number2=0;
+		set_circle_edge(X,Y,Z,&number2,le,ear_R);//円外周
+		//set_circle_in(X,Y,Z,type1,&number,le,R,0,number);////円内部  vector配列は参照渡ししている
+		set_circle_in_using_6_pieces(X,Y,Z,&number2,le,ear_R,0,number2);//円内部    vector配列は参照渡ししている
+
+		//球作成
+		set_sphere(X,Y,Z,&number2,le,ear_R,flag);
+
+
+		for(int i=0;i<X2.size();i++){
+			X[i]=X[i]+spac/2;
+			Z[i]=Z[i]+ear_hi+10*le+CON->get_R1();
+		}
+		for(int i=0;i<X.size();i++){
+			//				if(sqrt(pow(X[i],2)+pow(Y[i],2)+pow(Z[i],2)) > face_R+0.1*le)
+			{
+				X3.push_back(X[i]);
+				Y3.push_back(Y[i]);
+				Z3.push_back(Z[i]);
+			}
+		}
+		num+=(int)X3.size();
+		cout<<"顔の作成"<<endl;
+		//顔作成
+		int number3=0;
+		set_circle_edge(X4,Y4,Z4,&number3,le,face_R);//円外周
+		//set_circle_in(X,Y,Z,type1,&number,le,R,0,number);////円内部  vector配列は参照渡ししている
+		set_circle_in_using_6_pieces(X4,Y4,Z4,&number3,le,face_R,0,number3);//円内部    vector配列は参照渡ししている.
+
+		//球作成
+		set_sphere(X4,Y4,Z4,&number3,le,face_R,flag);
+
+		for(int i=0;i<X4.size();i++){
+			//				if(sqrt(pow(spac/2-X4[i],2)+pow(Y4[i],2)+pow(ear_hi+10*le+CON->get_re()-Z4[i],2)) > face_R-0.2*le && sqrt(pow(spac/2+X4[i],2)+pow(Y4[i],2)+pow(ear_hi+10*le+CON->get_re()-Z4[i],2)) > face_R-0.2*le)
+			surface3.push_back(0);
+		}
+		num+=(int)X4.size();
+		//合成
+		//			make_fusion3D(X,Y,Z,X3,Y3,Z3,surface3,&num,le);
+		//			make_fusion3D(X,Y,Z,X2,Y2,Z2,surface2,&num,le);
+		//出力
+		for(int i=0;i<X2.size();i++){
+			writedata2(fq,i,X2[i],Y2[i],Z2[i]+5*le,ELASTIC,1, 0,0, 0, 0, 0,0,0,0, 0, 0, 0);
+		}
+		for(int i=0;i<X3.size();i++){
+			writedata2(fq,i+X2.size(),X3[i],Y3[i],Z3[i]+5*le,ELASTIC,1, 0,0, 0, 0, 0,0,0,0, 0, 0,0);
+		}
+		for(int i=0;i<X4.size();i++){
+			writedata2(fq,i+X2.size()+X3.size(),X4[i],Y4[i],Z4[i]+10*le+CON->get_R1()+5*le,MAGELAST,1, 0,0, 0, 0, 0,0,0,0, 0, 0,1);
+		}
+
+		number=num;//*/
+		cout<<"床の作成"<<endl;
+		//下壁
+		double Wr=20*le;//壁の半径
+		double Wh=6*le;//壁の高さ
+		int num3=num;
+		int number4=0;
+		/*			double mdis=le; //*0.5
+		set_circle_edge(X5,Y5,Z5,&number4,mdis,Wr);//円外周　これがないと内部も作れない
+		set_circle_in_using_6_pieces(X5,Y5,Z5,&number4,mdis,Wr,0,number4);//円内部    vector配列は参照渡ししている　//0をnum3に変更
+		int end_id=number;	//円の粒子idを記憶
+
+		int topw_flag=ON;		//円柱の上面も作成するからフラグをON
+		set_cylinder_face(X5,Y5,Z5,&number4,mdis,Wr,Wh,0,end_id,topw_flag);//円柱表面座標作成
+		set_cylinder_in(X5,Y5,Z5,&number4,mdis,Wr,Wh,1,0);//内部にパッキング　　　//最後にint num3(壁の最初の粒子数)を加える．MD_3Dで必要
+		int ii=0;
+		for(int i=0;i<number4;i++){
+		if(Z5[i]>=Wh/2){
+		writedata2(fq,ii+num3,X5[i], Y5[i], Z5[i]-Wh-8*le-face_R/2,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
+		ii++;
+		}
+		}
+		number+=ii;//*/
+		int ii=0;
+		for(int i=0;i<30;i++){
+			for(int j=0;j<30;j++){
+				for(int k=0;k<3;k++){
+					writedata2(fq,ii+num3,i*le-(15*le), j*le-(15*le), k*le+6*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
+					ii++;
 				}
 			}
-			number+=ii;
+		}
+		number+=ii;
 	}
 
 
 	///////////////////////////////////////剛体確認/////////////////////////////////////////////////
 	else if(model==12){
 		int num=0;
-			for(int i=0;i<5;i++){
-				for(int j=0;j<5;j++){
-					for(int k=0;k<5;k++){
-						writedata2(fq,num,i*le, j*le, k*le,TERMINAL1,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
-						num++;
-					}
+		for(int i=0;i<5;i++){
+			for(int j=0;j<5;j++){
+				for(int k=0;k<5;k++){
+					writedata2(fq,num,i*le, j*le, k*le,TERMINAL1,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
+					num++;
 				}
 			}
-			number+=num;
-/*			int num2=0;
-			for(int i=0;i<5;i++){
-				for(int j=0;j<5;j++){
-					for(int k=0;k<5;k++){
-						writedata2(fq,num2,i*le, j*le-4*le, k*le+7*le,TERMINAL2,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
-						num2++;
-					}
+		}
+		number+=num;
+		/*			int num2=0;
+		for(int i=0;i<5;i++){
+		for(int j=0;j<5;j++){
+		for(int k=0;k<5;k++){
+		writedata2(fq,num2,i*le, j*le-4*le, k*le+7*le,TERMINAL2,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
+		num2++;
+		}
+		}
+		}
+		number+=num2;*/
+		int ii=0;
+		for(int i=0;i<30;i++){
+			for(int j=0;j<30;j++){
+				for(int k=0;k<3;k++){
+					writedata2(fq,ii+num,i*le-(15*le), j*le-(15*le), k*le-4*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
+					ii++;
 				}
 			}
-			number+=num2;*/
-	int ii=0;
-			for(int i=0;i<30;i++){
-				for(int j=0;j<30;j++){
-					for(int k=0;k<3;k++){
-						writedata2(fq,ii+num,i*le-(15*le), j*le-(15*le), k*le-4*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
-						ii++;
-					}
-				}
-			}
-			number+=ii;//*/
+		}
+		number+=ii;//*/
 	}
 	else if(model==13)
-{
+	{
 		int dimension=3;                                //･筵ﾇ･・ﾎｼ｡ｸｵ
 
 		double R=le*14;
 		int flag=FULL;
-				////////////////////･ﾟ･ﾃ･ｭ｡ｼ､ﾎｴ・///////////////////////////////
+		////////////////////･ﾟ･ﾃ･ｭ｡ｼ､ﾎｴ・///////////////////////////////
 
 		set_circle_edge(X,Y,Z,&number,le,R);//ｱﾟｳｰｼ｡ﾊ･ﾟ･ﾃ･ｭ｡ｼ､ﾎｴ鬘ﾋ
 
@@ -764,42 +764,42 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 
 		//ｵ蠎鋿ｮ
 		set_sphere(X,Y,Z,&number,le,R,flag);
-			
+
 		//ｽ魘・ｭｹ､ﾟ｡｡ｽｭｹ､ﾟ､ｿﾅﾙ､ｫ､ｹ､・ｳ､ﾈ､ﾇ｡｢､ｽ､ﾎｲｬ･筵ﾇ･・ｬﾁ､ｨ､・｣
 		//for(int i=0;i<number;i++) writedata2(fq,i,X[i],Y[i],Z[i],FRFLUID,1,0,Y[i]*40,0,0,0,0);
-	
+
 		for(int i=0;i<number;i++)
 		{
-/*			double r=sqrt(X[i]*X[i]+Y[i]*Y[i]);
+			/*			double r=sqrt(X[i]*X[i]+Y[i]*Y[i]);
 			double a=0.2;
-			
-		//		a=500*3;//･ｯ｡ｼ･愠ｬﾎﾎ､ﾈ､ｭ
+
+			//		a=500*3;//･ｯ｡ｼ･愠ｬﾎﾎ､ﾈ､ｭ
 			a=200;	//ﾍｷ､ﾓ
-					
+
 			vx=-0.5*a*X[i];
 			vy=-0.5*a*Y[i];
 			vz=a*Z[i];*/            //ｺ｣ｲｳｻﾒﾂｮﾅﾙ､ﾏｱﾆｶﾁ､ｷ､ﾊ､､､ｿ､癸｢ﾂｮﾅﾙ0､ﾇｰ・熙ﾋﾀﾟﾄ遙｣ﾎｳｻﾒﾂｮﾅﾙ､ｬｱﾆｶﾁ､ｹ､・・遉ﾏ､ｳ､ﾎｷﾗｻｻ､・
 
 			writedata2(fq, i,X[i],   Y[i],Z[i],MAGELAST,1,OFF,val, 0,0, 0,0, 0, 0,0,0,0);                              
-			
 
-		/*	make_fusion3D(X4,Y4,Z4,X2,Y2,Z2,surface2,&number,le);		//､荀・､ｬ､隍惕ｷ､ｯ､ﾊ､ｯ｡｢･ｨ･鬘ｼ､ｬｽﾐ､・ﾄﾇｽﾀｭﾂ遑｣
+
+			/*	make_fusion3D(X4,Y4,Z4,X2,Y2,Z2,surface2,&number,le);		//､荀・､ｬ､隍惕ｷ､ｯ､ﾊ､ｯ｡｢･ｨ･鬘ｼ､ｬｽﾐ､・ﾄﾇｽﾀｭﾂ遑｣
 			make_fusion3D(X4,Y4,Z4,X3,Y3,Z3,surface2,&number,le);*/    //､ﾁ､ﾊ､ﾟ､ﾋ､ｳ､ﾎｴﾘｿﾏ｡｢ﾎｳｻﾒﾌｩﾅﾙ､ｬｻｶ､ｵ､ｻ｡｢･ｨ･鬘ｼ､ﾎｽﾐ､ﾊ､､ﾎｳｻﾒｵ･､ﾋ､ﾊ､・隍ｦ､ﾋﾎｳｻﾒ､ﾖ､ｭﾄｾ､ｹ､ｳ､ﾈ､ﾋ､隍ﾃ､ﾆﾎｳｻﾒ､ｬｲ睥ｩ､ﾋ､ﾊ､・ｳ､ﾈ､ﾉ､､､ﾇ､ｯ､・・｣
-		
-			
+
+
 		}
 
-/*		int beforeNumber=number; //･ﾟ･ﾃ･ｭ｡ｼ､ﾎ､ﾈ､ｭ､ﾋｻﾈ､ﾃ､ｿﾎｳｻﾒｿﾎﾊﾝﾂｸ */
+		/*		int beforeNumber=number; //･ﾟ･ﾃ･ｭ｡ｼ､ﾎ､ﾈ､ｭ､ﾋｻﾈ､ﾃ､ｿﾎｳｻﾒｿﾎﾊﾝﾂｸ */
 
-			//for(int i=0;i<number;i++) if(fabs(Z[i])<0.001) writedata2(fq,  i,X[i],Y[i],Z[i]+Zg,FLUID,1, OFF,0, 0,0, 0, 0, 0, ON);
+		//for(int i=0;i<number;i++) if(fabs(Z[i])<0.001) writedata2(fq,  i,X[i],Y[i],Z[i]+Zg,FLUID,1, OFF,0, 0,0, 0, 0, 0, ON);
 
 
 		int length=6;
 		int width=35;
 		int depth=35;
 		int tan=0;//ﾎｳｻﾒｹ筅ｵﾎｳｻﾒ5｡｡ﾃｼｻﾒ､ﾎｹ筅ｵ､ｳ､・ﾇｷ隍皃ﾆ､､､・鬢ｷ､､｡｣
-//		double accel=0.005;//ﾎｳｻﾒ､ﾎｲﾃﾂｮﾅﾙ､鬢ｷ､､｡｣ﾋﾜﾅﾏｺﾇｽ鬢ﾏ0､ﾀ､ｱ､ﾉ｡｢ｾｯ､ｷｲﾃﾂｮﾅﾙ､ｿ､ｨ､ﾆ､ｫ､鬢ｹ､・ﾈｷﾗｻｻ､ｷ､荀ｹ､､､ﾈ､ｫ｡ｦ｡ｦ｡ｦ
-//		le*=0.5;//ﾎｳｻﾒｴﾖｵ･
+		//		double accel=0.005;//ﾎｳｻﾒ､ﾎｲﾃﾂｮﾅﾙ､鬢ｷ､､｡｣ﾋﾜﾅﾏｺﾇｽ鬢ﾏ0､ﾀ､ｱ､ﾉ｡｢ｾｯ､ｷｲﾃﾂｮﾅﾙ､ｿ､ｨ､ﾆ､ｫ､鬢ｹ､・ﾈｷﾗｻｻ､ｷ､荀ｹ､､､ﾈ､ｫ｡ｦ｡ｦ｡ｦ
+		//		le*=0.5;//ﾎｳｻﾒｴﾖｵ･
 
 		int number2=0;
 
@@ -826,7 +826,7 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 			}
 		}
 
-	///////////////////////////////////////
+		///////////////////////////////////////
 		for(int i=0;i<number2;i++)//AVS､ﾇﾉｽｼｨ､ｹ､・ﾝ､ﾎｺﾂﾉｸ､ﾎﾄｴﾀｰ
 		{
 			writedata2(fq,i+number,X5[i]-depth*le/2,Y5[i]-width*le/2,Z5[i]-length*le/2-1.3*R,WALL,1,ON,0,0,0,0,0,0,0,0,0,0);
@@ -837,10 +837,10 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 
 
 
-}
+	}
 
 	//////////////////モデル13　球体2つ//////////////////////////
-	 if(model==15)
+	if(model==15)
 	{
 		double R=CON->get_R1();			//作成する円の半径
 		double Zg=R*3;					//球の中心高さ
@@ -848,135 +848,135 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 		int dimension=3;
 		int number2=0;
 		int flag=FULL;
-		
+
 		//初期情報書き込み
 		//for(int i=0;i<number;i++) writedata2(fq,i,X[i],Y[i],Z[i],FRFLUID,1,0,Y[i]*40,0,0,0,0);
 		double vx=0;
 		double vy=0;
 		double vz=0;
 
-			//円作成
-			set_circle_edge(X,Y,Z,&number,le,R);//円外周
-			//set_circle_in(X,Y,Z,type1,&number,le,R,0,number);////円内部  vector配列は参照渡ししている
-			set_circle_in_using_6_pieces(X,Y,Z,&number,le,R,0,number);//円内部    vector配列は参照渡ししている
-			//球作成
-			set_sphere(X,Y,Z,&number,le,R,flag);
+		//円作成
+		set_circle_edge(X,Y,Z,&number,le,R);//円外周
+		//set_circle_in(X,Y,Z,type1,&number,le,R,0,number);////円内部  vector配列は参照渡ししている
+		set_circle_in_using_6_pieces(X,Y,Z,&number,le,R,0,number);//円内部    vector配列は参照渡ししている
+		//球作成
+		set_sphere(X,Y,Z,&number,le,R,flag);
 
-			for(int i=0;i<number;i++)
-			{
-				double r=sqrt(X[i]*X[i]+Y[i]*Y[i]);
-				double a=0.2;
-		//		a=500*3;//クーロン分裂のとき
-				a=200;	//遊び
-				
-				
-				vx=-0.5*a*X[i];
-				vy=-0.5*a*Y[i];
-				vz=a*Z[i];
-				 
+		for(int i=0;i<number;i++)
+		{
+			double r=sqrt(X[i]*X[i]+Y[i]*Y[i]);
+			double a=0.2;
+			//		a=500*3;//クーロン分裂のとき
+			a=200;	//遊び
+
+
+			vx=-0.5*a*X[i];
+			vy=-0.5*a*Y[i];
+			vz=a*Z[i];
+
 			//	writedata2(fq,  i,X[i],Y[i],Z[i]+Zg,MAGELAST,1, OFF,val, vx,vy, vz,0,0,0,0, 0, 0);
-				writedata2(fq,  i,X[i]+Xg,Y[i],Z[i]+Zg+2*R,MAGELAST,1,1,val, 0,0, 0,0,0,0,0, 0, 1);
-			}
-			cout<<"球１完成\n";
+			writedata2(fq,  i,X[i]+Xg,Y[i],Z[i]+Zg+2*R,MAGELAST,1,1,val, 0,0, 0,0,0,0,0, 0, 1);
+		}
+		cout<<"球１完成\n";
 
-			//円作成
-			set_circle_edge(X2,Y2,Z2,&number2,le,R);//円外周
-			//set_circle_in(X,Y,Z,type1,&number,le,R,0,number);////円内部  vector配列は参照渡ししている
-			set_circle_in_using_6_pieces(X2,Y2,Z2,&number2,le,R,0,number2);//円内部    vector配列は参照渡ししている
-			//球作成
-			set_sphere(X2,Y2,Z2,&number2,le,R,flag);
+		//円作成
+		set_circle_edge(X2,Y2,Z2,&number2,le,R);//円外周
+		//set_circle_in(X,Y,Z,type1,&number,le,R,0,number);////円内部  vector配列は参照渡ししている
+		set_circle_in_using_6_pieces(X2,Y2,Z2,&number2,le,R,0,number2);//円内部    vector配列は参照渡ししている
+		//球作成
+		set_sphere(X2,Y2,Z2,&number2,le,R,flag);
 
 
-			for(int i=0;i<number2;i++)
-			{
-				double r=sqrt(X2[i]*X2[i]+Y2[i]*Y2[i]);
-				double a=0.2;
-		//		a=500*3;//クーロン分裂のとき
-				a=200;	//遊び
-				
-				
-				vx=-0.5*a*X2[i];
-				vy=-0.5*a*Y2[i];
-				vz=a*Z2[i];
-				 
+		for(int i=0;i<number2;i++)
+		{
+			double r=sqrt(X2[i]*X2[i]+Y2[i]*Y2[i]);
+			double a=0.2;
+			//		a=500*3;//クーロン分裂のとき
+			a=200;	//遊び
+
+
+			vx=-0.5*a*X2[i];
+			vy=-0.5*a*Y2[i];
+			vz=a*Z2[i];
+
 			//	writedata2(fq,  i,X[i],Y[i],Z[i]+Zg,MAGELAST,1, OFF,val, vx,vy, vz,0,0,0,0, 0, 0);
-				writedata2(fq,  i+number,X2[i]-Xg,Y2[i],Z2[i]+Zg,ELASTIC,1,1,val, 0,0, 0,0,0,0,0, 0, 0);
+			writedata2(fq,  i+number,X2[i]-Xg,Y2[i],Z2[i]+Zg,ELASTIC,1,1,val, 0,0, 0,0,0,0,0, 0, 0);
+		}
+		cout<<"球２完成\n";
+
+		number+=number2;
+
+		//for(int i=0;i<number;i++) if(fabs(Z[i])<0.001) writedata2(fq,  i,X[i],Y[i],Z[i]+Zg,FLUID,1, OFF,0, 0,0, 0, 0, 0, ON);
+
+		//下壁
+		//double Width=27*le;
+		cout<<"床の作成"<<endl;
+		//下壁
+		double Wr=60*le;//壁の半径
+		double Wh=6*le;//壁の高さ
+		int ii=0;
+		for(int i=0;i<60;i++){
+			for(int j=0;j<60;j++){
+				for(int k=0;k<3;k++){
+					writedata2(fq,ii+number,i*le-(30*le), j*le-(30*le), k*le+6*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
+					ii++;
+				}
 			}
-			cout<<"球２完成\n";
+		}
+		number+=ii;
+		cout<<"model13完成\n";
+	}
 
-			number+=number2;
+	//////////////モデル16　層/////////////////////////////////////////////////////////////////////////
+	if(model==16)
+	{
+		double h=5;
+		double lm=27;
+		double ls=lm+15;
+		double lw=ls+10;
+		double d=0;
+		double f=0;
 
-			//for(int i=0;i<number;i++) if(fabs(Z[i])<0.001) writedata2(fq,  i,X[i],Y[i],Z[i]+Zg,FLUID,1, OFF,0, 0,0, 0, 0, 0, ON);
+		int num=0;
+		int num2=0;
+		int num3=0;
 
-			//下壁
-			//double Width=27*le;
-			cout<<"床の作成"<<endl;
-			//下壁
-			double Wr=60*le;//壁の半径
-			double Wh=6*le;//壁の高さ
-			int ii=0;
-			for(int i=0;i<60;i++){
-				for(int j=0;j<60;j++){
-					for(int k=0;k<3;k++){
-						writedata2(fq,ii+number,i*le-(30*le), j*le-(30*le), k*le+6*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);//粒子はWALL
-						ii++;
+		for(int i=0;i<ls;i++)
+		{
+			double ii=abs(i-ls/2);
+			for(int j=0;j<ls;j++)
+			{
+				double jj=abs(j-ls/2);
+				for(int k=0;k<lm;k++)
+				{
+					if(ii<=lm/2 && jj<=h/2)
+					{
+						num2++;
+						X2.push_back(i*le);
+						Y2.push_back(j*le);
+						Z2.push_back(k*le);
+					}
+					else
+					{
+						num++;
+						X.push_back(i*le);
+						Y.push_back(j*le);
+						Z.push_back(k*le);
 					}
 				}
 			}
-			number+=ii;
-			cout<<"model13完成\n";
 		}
 
-	 //////////////モデル16　層/////////////////////////////////////////////////////////////////////////
-	 if(model==16)
-	 {
-		 double h=5;
-		 double lm=27;
-		 double ls=lm+15;
-		 double lw=ls+10;
-		 double d=0;
-		 double f=0;
+		for(int i=0;i<num;i++)
+			writedata2(fq,num,X[i]-ls*le/2,Y[i]-ls*le/2,Z[i]+5*le,ELASTIC,1,1,val,0,0,0,0,0,0,0,0,0);
+		for(int i=0;i<num2;i++)
+			writedata2(fq,num2+num,X2[i]-ls*le/2,Y2[i]-ls*le/2,Z2[i]+5*le,MAGELAST,1,1,val,0,0,0,0,0,0,0,0,1);
 
-		 int num=0;
-		 int num2=0;
-		 int num3=0;
+		number+=num+num2;
+		cout<<"モデル完成\n";
 
-		 for(int i=0;i<ls;i++)
-		 {
-			 double ii=abs(i-ls/2);
-			 for(int j=0;j<ls;j++)
-			 {
-				 double jj=abs(j-ls/2);
-				 for(int k=0;k<lm;k++)
-				 {
-					 if(ii<=lm/2 && jj<=h/2)
-					 {
-						num2++;
-						X2.push_back(i*le);
-						Y2.push_back(j*le);
-						Z2.push_back(k*le);
-					 }
-					 else
-					 {
-						num++;
-						X.push_back(i*le);
-						Y.push_back(j*le);
-						Z.push_back(k*le);
-					 }
-				 }
-			 }
-		 }
-
-		 for(int i=0;i<num;i++)
-			 writedata2(fq,num,X[i]-ls*le/2,Y[i]-ls*le/2,Z[i]+5*le,ELASTIC,1,1,val,0,0,0,0,0,0,0,0,0);
-		 for(int i=0;i<num2;i++)
-			 writedata2(fq,num2+num,X2[i]-ls*le/2,Y2[i]-ls*le/2,Z2[i]+5*le,MAGELAST,1,1,val,0,0,0,0,0,0,0,0,1);
-
-		 number+=num+num2;
-		 cout<<"モデル完成\n";
-
-		 for(int i=0;i<lw;i++)
-		 {
+		for(int i=0;i<lw;i++)
+		{
 			for(int j=0;j<lw;j++)
 			{
 				for(int k=0;k<6;k++)
@@ -994,64 +994,64 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 					writedata2(fq,num3+number,(i-lw/2+d*f)*le,(j-lw/2)*le,(k-6)*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);
 				}
 			}
-		 }
+		}
 
-		 number+=num3;
-		 cout<<"壁完成\n";
+		number+=num3;
+		cout<<"壁完成\n";
 
-	 }
+	}
 
 
 	////////////////////////モデル17　層２////////////////////////////////////////////////////////////////
-	 if(model==17)
-	 {
-		 double h=5;
-		 double lm=27;
-		 double ls=lm+15;
-		 double lw=ls+10;
-		 double d=0;
-		 double f=0;
+	if(model==17)
+	{
+		double h=5;
+		double lm=27;
+		double ls=lm+15;
+		double lw=ls+10;
+		double d=0;
+		double f=0;
 
-		 int num=0;
-		 int num2=0;
-		 int num3=0;
+		int num=0;
+		int num2=0;
+		int num3=0;
 
-		 for(int i=0;i<ls;i++)
-		 {
-			 double ii=abs(i-ls/2);
-			 for(int j=0;j<ls;j++)
-			 {
-				 double jj=abs(j-ls/2);
-				 for(int k=0;k<lm;k++)
-				 {
-					 if((ii<=lm/2+h && jj<=h/2) || (ii<=lm/2+h && ii>=lm/2 && jj<=lm/2))
-					 {
+		for(int i=0;i<ls;i++)
+		{
+			double ii=abs(i-ls/2);
+			for(int j=0;j<ls;j++)
+			{
+				double jj=abs(j-ls/2);
+				for(int k=0;k<lm;k++)
+				{
+					if((ii<=lm/2+h && jj<=h/2) || (ii<=lm/2+h && ii>=lm/2 && jj<=lm/2))
+					{
 						num2++;
 						X2.push_back(i*le);
 						Y2.push_back(j*le);
 						Z2.push_back(k*le);
-					 }
-					 else
-					 {
+					}
+					else
+					{
 						num++;
 						X.push_back(i*le);
 						Y.push_back(j*le);
 						Z.push_back(k*le);
-					 }
-				 }
-			 }
-		 }
+					}
+				}
+			}
+		}
 
-		 for(int i=0;i<num;i++)
-			 writedata2(fq,num,X[i]-ls*le/2,Y[i]-ls*le/2,Z[i]+3*le,ELASTIC,1,1,val,0,0,0,0,0,0,0,0,0);
-		 for(int i=0;i<num2;i++)
-			 writedata2(fq,num2+num,X2[i]-ls*le/2,Y2[i]-ls*le/2,Z2[i]+3*le,MAGELAST,1,1,val,0,0,0,0,0,0,0,0,1);
+		for(int i=0;i<num;i++)
+			writedata2(fq,num,X[i]-ls*le/2,Y[i]-ls*le/2,Z[i]+3*le,ELASTIC,1,1,val,0,0,0,0,0,0,0,0,0);
+		for(int i=0;i<num2;i++)
+			writedata2(fq,num2+num,X2[i]-ls*le/2,Y2[i]-ls*le/2,Z2[i]+3*le,MAGELAST,1,1,val,0,0,0,0,0,0,0,0,1);
 
-		 number+=num+num2;
-		 cout<<"モデル完成\n";
+		number+=num+num2;
+		cout<<"モデル完成\n";
 
-		 for(int i=0;i<lw;i++)
-		 {
+		for(int i=0;i<lw;i++)
+		{
 			for(int j=0;j<lw;j++)
 			{
 				for(int k=0;k<6;k++)
@@ -1069,297 +1069,297 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 					writedata2(fq,num3+number,(i-lw/2+d*f)*le,(j-lw/2)*le,(k-6)*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);
 				}
 			}
-		 }
+		}
 
-		 number+=num3;
-		 cout<<"壁完成\n";
+		number+=num3;
+		cout<<"壁完成\n";
 
-	 }
-	 ////////////////////////////////モデル18　実機////////////////////////////////////////////////
+	}
+	////////////////////////////////モデル18　実機////////////////////////////////////////////////
 
-	 	 if(model==18)
-	 {
-		 double h=2;
-		 double lm=8.7;
-		 double ls=17.3;
-		 double flag_model=1;
+	if(model==18)
+	{
+		double h=2;
+		double lm=8.7;
+		double ls=17.3;
+		double flag_model=1;
 
-		 int num=0;
-		 int num2=0;
+		int num=0;
+		int num2=0;
 
-		 for(int i=0;i<ls;i++)
-		 {
-			 double ii=fabs(i-ls/2);
-			 for(int j=0;j<ls;j++)
-			 {
-				 double jj=fabs(j-ls/2);
-				 for(int k=0;k<ls;k++)
-				 {
-					 double kk=fabs(k-ls/2);
+		for(int i=0;i<ls;i++)
+		{
+			double ii=fabs(i-ls/2);
+			for(int j=0;j<ls;j++)
+			{
+				double jj=fabs(j-ls/2);
+				for(int k=0;k<ls;k++)
+				{
+					double kk=fabs(k-ls/2);
 
-					 if(flag_model==0)
-					 {
-						 if(ii<=lm/2 && kk<=h/2)
-						 {
+					if(flag_model==0)
+					{
+						if(ii<=lm/2 && kk<=h/2)
+						{
 							num2++;
 							X2.push_back(i*le);
 							Y2.push_back(j*le);
 							Z2.push_back(k*le);
-						 }
-						 else
-						 {
+						}
+						else
+						{
 							num++;
 							X.push_back(i*le);
 							Y.push_back(j*le);
 							Z.push_back(k*le);
-						 }
-					 }
+						}
+					}
 
-					 if(flag_model==1)
-					 {
-						 if(ii<=h/2 && kk<=lm/2)
-						 {
+					if(flag_model==1)
+					{
+						if(ii<=h/2 && kk<=lm/2)
+						{
 							num2++;
 							X2.push_back(i*le);
 							Y2.push_back(j*le);
 							Z2.push_back(k*le);
-						 }
-						 else
-						 {
+						}
+						else
+						{
 							num++;
 							X.push_back(i*le);
 							Y.push_back(j*le);
 							Z.push_back(k*le);
-						 }
-					 }
+						}
+					}
 
-					 if(flag_model==2)
-					 {
-						 if(ii<=lm/2 && jj<=h/2)
-						 {
+					if(flag_model==2)
+					{
+						if(ii<=lm/2 && jj<=h/2)
+						{
 							num2++;
 							X2.push_back(i*le);
 							Y2.push_back(j*le);
 							Z2.push_back(k*le);
-						 }
-						 else
-						 {
+						}
+						else
+						{
 							num++;
 							X.push_back(i*le);
 							Y.push_back(j*le);
 							Z.push_back(k*le);
-						 }
-					 }
+						}
+					}
 
-				 }
-			 }
-		 }
+				}
+			}
+		}
 
-		 for(int i=0;i<num;i++)
-			 writedata2(fq,num,X[i]-ls*le/2,Y[i]-ls*le/2,Z[i]+2*le,ELASTIC,1,1,val,0,0,0,0,0,0,0,0,0);
-		 for(int i=0;i<num2;i++)
-			 writedata2(fq,num2+num,X2[i]-ls*le/2,Y2[i]-ls*le/2,Z2[i]+2*le,MAGELAST,1,1,val,0,0,0,0,0,0,0,0,1);
+		for(int i=0;i<num;i++)
+			writedata2(fq,num,X[i]-ls*le/2,Y[i]-ls*le/2,Z[i]+2*le,ELASTIC,1,1,val,0,0,0,0,0,0,0,0,0);
+		for(int i=0;i<num2;i++)
+			writedata2(fq,num2+num,X2[i]-ls*le/2,Y2[i]-ls*le/2,Z2[i]+2*le,MAGELAST,1,1,val,0,0,0,0,0,0,0,0,1);
 
-		 cout<<"モデル完成\n";
+		cout<<"モデル完成\n";
 
- 		 number=num+num2;
+		number=num+num2;
 
-		 ///////////////////////下壁作成///////////////////
+		///////////////////////下壁作成///////////////////
 
-		 double Rw=14*le;
-		 double hw=3*le;
-		 int number2=0;
-		 int ii=0;
+		double Rw=14*le;
+		double hw=3*le;
+		int number2=0;
+		int ii=0;
 
-		 set_circle_edge(X3,Y3,Z3,&number2,le,Rw);
-		 set_circle_in_using_6_pieces(X3,Y3,Z3,&number2,le,Rw,0,number2);
+		set_circle_edge(X3,Y3,Z3,&number2,le,Rw);
+		set_circle_in_using_6_pieces(X3,Y3,Z3,&number2,le,Rw,0,number2);
 
-		 int end_id=number2;
-		 int topw_flag=ON;
-		 set_cylinder_face(X3,Y3,Z3,&number2,le,Rw,hw,0,end_id,topw_flag);
-		 set_cylinder_in(X3,Y3,Z3,&number2,le,Rw,hw,1,0);
+		int end_id=number2;
+		int topw_flag=ON;
+		set_cylinder_face(X3,Y3,Z3,&number2,le,Rw,hw,0,end_id,topw_flag);
+		set_cylinder_in(X3,Y3,Z3,&number2,le,Rw,hw,1,0);
 
-		 for(int i=0;i<number2;i++)
-		 {
-			 if(Z3[i]<le)
-			 {
-				 ii++;
-				 writedata2(fq,ii+number,X3[i],Y3[i],Z3[i]-le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);
-			 }
-		 }
+		for(int i=0;i<number2;i++)
+		{
+			if(Z3[i]<le)
+			{
+				ii++;
+				writedata2(fq,ii+number,X3[i],Y3[i],Z3[i]-le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);
+			}
+		}
 
-		 cout<<"壁完成\n";
+		cout<<"壁完成\n";
 
-		 number+=ii;
+		number+=ii;
 
-	 }
-
-
-	 ///////////////////////////////////////////////////////////////////////////////////////////////////
-	 
-	 /////////////////////////////////////////////モデル19　表情筋/////////////////////////////////////////////////////
-
-	 if(model==19)
-	 {
-		 double Ra=20.0;
-		 double Rb=10.0;
-		 double hight=5.0;
-		 int number2=0;
-
-		 for(int i=0;i<Ra;i++)
-		 {
-			 for(int j=0;j<Rb;j++)
-			 {
-				 for(int k=0;k<hight;k++)
-				 {
-					 X.push_back(i*le);
-					 Y.push_back(j*le);
-					 Z.push_back(k*le);
-					 number++;
-				 }
-			 }
-		 }
-
-		 for(int i=0;i<number;i++)
-		 {
-			 writedata2(fq,i,X[i]-(Ra*le+5*le),Y[i]-Rb*le/2,Z[i]+4*le,MAGELAST,1,1,0,0,0,0,0,0,0,0,0,1);
-		 }
-
-		 cout<<"MRE完成\n";
-
-		 for(int i=0;i<Ra*3;i++)
-		 {
-			 for(int j=0;j<Rb*1.5;j++)
-			 {
-				 for(int k=0;k<3;k++)
-				 {
-					 number2++;
-					 writedata2(fq,number+number2,i*le-Ra*3/2*le,j*le-Rb*1.5/2*le,k*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);
-				 }
-			 }
-		 }
-
-		 cout<<"壁完成\n";
-		 number+=number2;
-
-	 }
-
-	 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	 	 /////////////////////////////////////////////モデル20　表情筋2/////////////////////////////////////////////////////
-
-	 if(model==20)
-	 {
-		 double Ra=20.0;
-		 double Rb=10.0;
-		 double hight=5.0;
-		 int number2=0;
-		 int number3=0;
-		 double f=0;
-		 double a=0;
-
-		 for(int i=0;i<Ra;i++)
-		 {
-			 for(int j=0;j<Rb;j++)
-			 {
-				 for(int k=0;k<hight;k++)
-				 {
-
-					 double f=k-0.75*(i-(Ra/2-5));
-					 double a=hight/2-1;
-
-					 if (fabs(f)<=fabs(a))
-					 {
-						 X2.push_back(i*le);
-						 Y2.push_back(j*le);
-						 Z2.push_back(k*le);
-						 number2++;
-					 }
-
-					 else
-					 {
-					 X.push_back(i*le);
-					 Y.push_back(j*le);
-					 Z.push_back(k*le);
-					 number++;
-					 }
-
-				 }
-			 }
-		 }
-
-		 for(int i=0;i<number;i++)
-		 {
-			 writedata2(fq,i,X[i]-(Ra*le+5*le),Y[i]-Rb*le/2,Z[i]+4*le,ELASTIC,1,1,0,0,0,0,0,0,0,0,0,0);
-		 }
-
-		  for(int i=0;i<number2;i++)
-		 {
-			 writedata2(fq,i+number,X2[i]-(Ra*le+5*le),Y2[i]-Rb*le/2,Z2[i]+4*le,MAGELAST,1,1,0,0,0,0,0,0,0,0,0,1);
-		 }
-
-		  number+=number2;
-
-		 cout<<"model完成\n";
-
-		 for(int i=0;i<Ra*3;i++)
-		 {
-			 for(int j=0;j<Rb*1.5;j++)
-			 {
-				 for(int k=0;k<3;k++)
-				 {
-					 number3++;
-					 writedata2(fq,number+number3,i*le-Ra*3/2*le,j*le-Rb*1.5/2*le,k*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);
-				 }
-			 }
-		 }
-
-		 cout<<"壁完成\n";
-		 number+=number3;
-
-	 }
-
-	 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	}
 
 
-	 ///////////////////////////////////////////モデル21　超弾性///////////////////////////////////////////////////////////
-	 if(model==21)
-	 {
-		 double height=18.0;
-		 double base=3.0;
-		 double vx;
-		 double vy;
-		 double vz;
-		 double b=2;
-		 double t=30;
-		 double H=height/2;
+	///////////////////////////////////////////////////////////////////////////////////////////////////
 
-		 for(int i=0;i<base;i++)
-		 {
-			 for(int j=0;j<base;j++)
-			 {
-				 for(int k=0;k<height;k++)
-				 {
-					 
-					 vx=-t*k*k*k/H/H/H*j+b*(3*k*k/H/H-1);	//曲げ＋ねじり運動による速度
-					 vy=t*k*k*k/H/H/H*i;
-					 vz=0;
+	/////////////////////////////////////////////モデル19　表情筋/////////////////////////////////////////////////////
 
-					 vx+=0.4*i+1;	//角速度
-					 vy+=0.4*j;
-					 vz+=0.4*k;
+	if(model==19)
+	{
+		double Ra=20.0;
+		double Rb=10.0;
+		double hight=5.0;
+		int number2=0;
 
-					 writedata2(fq,number,i*le,j*le,k*le,HYPERELAST,1,ON,0,0,0,0,0,0,0,0,0,0);
-					 number++;
+		for(int i=0;i<Ra;i++)
+		{
+			for(int j=0;j<Rb;j++)
+			{
+				for(int k=0;k<hight;k++)
+				{
+					X.push_back(i*le);
+					Y.push_back(j*le);
+					Z.push_back(k*le);
+					number++;
+				}
+			}
+		}
 
-				 }
-			 }
-		 }
-		 cout<<"model完成\n";
-	 }
+		for(int i=0;i<number;i++)
+		{
+			writedata2(fq,i,X[i]-(Ra*le+5*le),Y[i]-Rb*le/2,Z[i]+4*le,MAGELAST,1,1,0,0,0,0,0,0,0,0,0,1);
+		}
 
-	  else if(model==22)	//越塚先生先行研究の円筒型
-	 {
+		cout<<"MRE完成\n";
+
+		for(int i=0;i<Ra*3;i++)
+		{
+			for(int j=0;j<Rb*1.5;j++)
+			{
+				for(int k=0;k<3;k++)
+				{
+					number2++;
+					writedata2(fq,number+number2,i*le-Ra*3/2*le,j*le-Rb*1.5/2*le,k*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);
+				}
+			}
+		}
+
+		cout<<"壁完成\n";
+		number+=number2;
+
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////モデル20　表情筋2/////////////////////////////////////////////////////
+
+	if(model==20)
+	{
+		double Ra=20.0;
+		double Rb=10.0;
+		double hight=5.0;
+		int number2=0;
+		int number3=0;
+		double f=0;
+		double a=0;
+
+		for(int i=0;i<Ra;i++)
+		{
+			for(int j=0;j<Rb;j++)
+			{
+				for(int k=0;k<hight;k++)
+				{
+
+					double f=k-0.75*(i-(Ra/2-5));
+					double a=hight/2-1;
+
+					if (fabs(f)<=fabs(a))
+					{
+						X2.push_back(i*le);
+						Y2.push_back(j*le);
+						Z2.push_back(k*le);
+						number2++;
+					}
+
+					else
+					{
+						X.push_back(i*le);
+						Y.push_back(j*le);
+						Z.push_back(k*le);
+						number++;
+					}
+
+				}
+			}
+		}
+
+		for(int i=0;i<number;i++)
+		{
+			writedata2(fq,i,X[i]-(Ra*le+5*le),Y[i]-Rb*le/2,Z[i]+4*le,ELASTIC,1,1,0,0,0,0,0,0,0,0,0,0);
+		}
+
+		for(int i=0;i<number2;i++)
+		{
+			writedata2(fq,i+number,X2[i]-(Ra*le+5*le),Y2[i]-Rb*le/2,Z2[i]+4*le,MAGELAST,1,1,0,0,0,0,0,0,0,0,0,1);
+		}
+
+		number+=number2;
+
+		cout<<"model完成\n";
+
+		for(int i=0;i<Ra*3;i++)
+		{
+			for(int j=0;j<Rb*1.5;j++)
+			{
+				for(int k=0;k<3;k++)
+				{
+					number3++;
+					writedata2(fq,number+number3,i*le-Ra*3/2*le,j*le-Rb*1.5/2*le,k*le,WALL,1,0,0,0,0,0,0,0,0,0,0,0);
+				}
+			}
+		}
+
+		cout<<"壁完成\n";
+		number+=number3;
+
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+	///////////////////////////////////////////モデル21　超弾性///////////////////////////////////////////////////////////
+	if(model==21)
+	{
+		double height=18.0;
+		double base=3.0;
+		double vx;
+		double vy;
+		double vz;
+		double b=2;
+		double t=30;
+		double H=height/2;
+
+		for(int i=0;i<base;i++)
+		{
+			for(int j=0;j<base;j++)
+			{
+				for(int k=0;k<height;k++)
+				{
+
+					vx=-t*k*k*k/H/H/H*j+b*(3*k*k/H/H-1);	//曲げ＋ねじり運動による速度
+					vy=t*k*k*k/H/H/H*i;
+					vz=0;
+
+					vx+=0.4*i+1;	//角速度
+					vy+=0.4*j;
+					vz+=0.4*k;
+
+					writedata2(fq,number,i*le,j*le,k*le,HYPERELAST,1,ON,0,0,0,0,0,0,0,0,0,0);
+					number++;
+
+				}
+			}
+		}
+		cout<<"model完成\n";
+	}
+
+	else if(model==22)	//越塚先生先行研究の円筒型
+	{
 
 		//double height=2./3.e-3;	//単位：cm
 		//double r0=35.e-3;	//直径
@@ -1500,16 +1500,16 @@ void set_initial_placement_using_MD(mpsconfig *CON,int *particle_number)
 		{
 			writedata2(fq,i,X[i]*le,Y[i]*le,(Z[i])*le,HYPERELAST,1,ON,0,0,0,0,0,0,0,0,0,1);
 		}
+	}
 
 
-
-	 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//////////////////////////////////////////////例外処理///////////////////////////////////////
 	else cout<<"modelエラー"<<endl;
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	fq.close();
-		
+
 	*particle_number=number;
 	ofstream fn("particle_number.dat");
 	fn<<number<<endl;
@@ -1525,28 +1525,28 @@ void writedata2(ofstream &fp, int id, double x, double y,double z, int type,int 
 
 /*void writedata(ofstream &fp, int number, double x, double y,double z, int type,double vx,double vy,double vz,double P,double h,int toFEM)
 {	
-	//fprintf( fp, "%5.10f\t", 0); とかいう数字の放り込みはだめ？
-	
-	double angle=0;//回転角
-	double angle2=0;
-	double angle3=0;
-	double angle_s=1;
-	double anglar_u=0;//角速度
-	double anglar_u2=0;//角速度
-	double anglar_u3=0;//角速度
-	
-	fp<<number<<"\t";
-	fp<<x<<"\t";
-	fp<<y<<"\t";
-	fp<<z<<"\t";
-	fp<<vx<<"\t";					//速度x成分
-	fp<<vy<<"\t";					//速度y成分
-	fp<<vz<<"\t";					//速度z成分
-	fp<<P<<"\t";					//圧力
-	fp<<h<<"\t";					//エンタルピー
-	fp<<angle<<"\t";					//回転角
-	fp<<type<<"\t";
-	fp<<toFEM<<endl;
+//fprintf( fp, "%5.10f\t", 0); とかいう数字の放り込みはだめ？
+
+double angle=0;//回転角
+double angle2=0;
+double angle3=0;
+double angle_s=1;
+double anglar_u=0;//角速度
+double anglar_u2=0;//角速度
+double anglar_u3=0;//角速度
+
+fp<<number<<"\t";
+fp<<x<<"\t";
+fp<<y<<"\t";
+fp<<z<<"\t";
+fp<<vx<<"\t";					//速度x成分
+fp<<vy<<"\t";					//速度y成分
+fp<<vz<<"\t";					//速度z成分
+fp<<P<<"\t";					//圧力
+fp<<h<<"\t";					//エンタルピー
+fp<<angle<<"\t";					//回転角
+fp<<type<<"\t";
+fp<<toFEM<<endl;
 }*/
 
 
@@ -1556,7 +1556,7 @@ void set_circle_edge(vector<double> &X,vector<double> &Y,vector<double> &Z,int *
 	//対称性を考えた時、円周を記述する粒子は偶数個でなければならない。
 
 	int N=calc_division_N_circle(2*PI*R,le);//円周の分割数
-	
+
 	double L=2*PI*R/N;				//粒子間距離
 	double theta=L/R;				//粒子を配置する角度
 
@@ -1575,7 +1575,7 @@ void set_circle_edge(vector<double> &X, vector<double> &Y, vector<double> &Z, in
 	//対称性を考えた時、円周を記述する粒子は偶数個でなければならない。
 
 	int N=calc_division_N_circle(2*PI*R,le);//円周の分割数
-	
+
 	double L=2*PI*R/N;				//粒子間距離
 	double theta=L/R;				//粒子を配置する角度
 
@@ -1622,7 +1622,7 @@ void set_circle_in(vector<double> &X,vector<double> &Y,vector<double> &Z,vector<
 	int half_WX=(int)(R/le)+1;  //円を十分含む四角形を想定する。その四角形の幅*0.5
 	int half_WY=(int)(R/(le*A))+1;  //円を十分含む正四角形を想定する。その四角形の幅*0.5
 	double R2=R-le*0.5;				//少し小さめの半径を設定
-	
+
 	//初期位置
 	for(int i=-half_WX;i<=half_WX;i++)
 	{
@@ -1670,7 +1670,7 @@ void set_circle_in_using_6_pieces(vector<double> &X,vector<double> &Y,vector<dou
 	double temp_R_num=R/le;			//半径方向に設置する『仮の』粒子数
 	int    R_num=(int)temp_R_num;	//真の粒子数　とりあえず仮の粒子数の整数番とする。ここで、temp_R_num>R_numが成立している。
 	double difference=temp_R_num-R_num;	//仮の数と真の数の差
-	
+
 	//仮の数と真の数の差が0.5までなら、真の数はNとする。0.5以上ならN+1とする
 	if(difference>0.5) R_num++;
 	double L=R/R_num;					//粒子間距離
@@ -1761,7 +1761,7 @@ void set_circle_in_using_6_pieces(vector<double> &X,vector<double> &Y,vector<dou
 	double temp_R_num=R/le;			//半径方向に設置する『仮の』粒子数
 	int    R_num=(int)temp_R_num;	//真の粒子数　とりあえず仮の粒子数の整数番とする。ここで、temp_R_num>R_numが成立している。
 	double difference=temp_R_num-R_num;	//仮の数と真の数の差
-	
+
 	//仮の数と真の数の差が0.5までなら、真の数はNとする。0.5以上ならN+1とする
 	if(difference>0.5) R_num++;
 	double L=R/R_num;					//粒子間距離
@@ -1864,7 +1864,7 @@ void set_sphere(vector<double> &X,vector<double> &Y,vector<double> &Z,int *numbe
 		int Nf=calc_division_N_circle(round,le);//球表面の、θ方向の分割数
 		double Lf=round/Nf;						//球表面の、θ方向の分割距離
 		double d_fai=Lf/r;						//弧の長さがLfになる角度
-		
+
 		for(int i=0;i<Nf;i++)
 		{
 			double fai=d_fai*i;
@@ -1882,7 +1882,7 @@ void set_sphere(vector<double> &X,vector<double> &Y,vector<double> &Z,int *numbe
 			X.push_back(x);
 			Y.push_back(y);
 			Z.push_back(z);
-			
+
 			newN++;
 		}
 	}
@@ -1899,74 +1899,74 @@ void set_sphere(vector<double> &X,vector<double> &Y,vector<double> &Z,int *numbe
 
 	if(flag!=HALFD_shell)
 	{
-	newN=0;					//個の関数で新しく追加する粒子数
-	beforeN=*number;		//この関数呼び出し時における粒子数
-	
-	//内部初期位置
-	for(int i=-half_WX;i<=half_WX;i++)
-	{
-		for(int j=-half_WY;j<=half_WY;j++)
+		newN=0;					//個の関数で新しく追加する粒子数
+		beforeN=*number;		//この関数呼び出し時における粒子数
+
+		//内部初期位置
+		for(int i=-half_WX;i<=half_WX;i++)
 		{
-			for(int k=1;k<half_WZ;k++)
+			for(int j=-half_WY;j<=half_WY;j++)
 			{
-				double ii=i*le;
-				double jj=j*le*A;
-				double kk=k*le*B;
-				if(j%2!=0) ii+=0.5*le;//jが奇数ならiiを0.5格子だけずらす
-				if(k%2!=0) {ii+=0.5*le; jj+=sqrt(3.0)/6*le;}//kが奇数ならiiとjjをずらす
-				if(ii*ii+jj*jj+kk*kk<R2*R2*0.6*0.6)//半径*0.7内の粒子は位置固定
+				for(int k=1;k<half_WZ;k++)
 				{
-					X.push_back(ii);
-					Y.push_back(jj);
-					Z.push_back(kk);
-					newN++;
+					double ii=i*le;
+					double jj=j*le*A;
+					double kk=k*le*B;
+					if(j%2!=0) ii+=0.5*le;//jが奇数ならiiを0.5格子だけずらす
+					if(k%2!=0) {ii+=0.5*le; jj+=sqrt(3.0)/6*le;}//kが奇数ならiiとjjをずらす
+					if(ii*ii+jj*jj+kk*kk<R2*R2*0.6*0.6)//半径*0.7内の粒子は位置固定
+					{
+						X.push_back(ii);
+						Y.push_back(jj);
+						Z.push_back(kk);
+						newN++;
+					}
 				}
 			}
 		}
-	}
-	*number=*number+newN;
+		*number=*number+newN;
 
-	newN=0;					//個の関数で新しく追加する粒子数
-	beforeN=*number;		//この関数呼び出し時における粒子数
-	///////////////////////*/
+		newN=0;					//個の関数で新しく追加する粒子数
+		beforeN=*number;		//この関数呼び出し時における粒子数
+		///////////////////////*/
 
-	
 
-	//内部初期位置
-	for(int i=-half_WX;i<=half_WX;i++)
-	{
-		for(int j=-half_WY;j<=half_WY;j++)
+
+		//内部初期位置
+		for(int i=-half_WX;i<=half_WX;i++)
 		{
-			for(int k=1;k<half_WZ;k++)
+			for(int j=-half_WY;j<=half_WY;j++)
 			{
-				double ii=i*le;
-				double jj=j*le*A;
-				double kk=k*le*B;
-				if(j%2!=0) ii+=0.5*le;//jが奇数ならiiを0.5格子だけずらす
-				if(k%2!=0) {ii+=0.5*le; jj+=sqrt(3.0)/6*le;}//kが奇数ならiiとjjをずらす
-				//if(ii*ii+jj*jj+kk*kk<R2*R2)
-				if(ii*ii+jj*jj+kk*kk<R2*R2 && ii*ii+jj*jj+kk*kk>=R2*R2*0.6*0.6)
+				for(int k=1;k<half_WZ;k++)
 				{
-					X.push_back(ii);
-					Y.push_back(jj);
-					Z.push_back(kk);
-					newN++;
+					double ii=i*le;
+					double jj=j*le*A;
+					double kk=k*le*B;
+					if(j%2!=0) ii+=0.5*le;//jが奇数ならiiを0.5格子だけずらす
+					if(k%2!=0) {ii+=0.5*le; jj+=sqrt(3.0)/6*le;}//kが奇数ならiiとjjをずらす
+					//if(ii*ii+jj*jj+kk*kk<R2*R2)
+					if(ii*ii+jj*jj+kk*kk<R2*R2 && ii*ii+jj*jj+kk*kk>=R2*R2*0.6*0.6)
+					{
+						X.push_back(ii);
+						Y.push_back(jj);
+						Z.push_back(kk);
+						newN++;
+					}
 				}
 			}
-		}
-	}///////////////////////*/
-	
+		}///////////////////////*/
 
-	//分子動力学により位置を最適化
-	double r=1.50;
-	double rigion[3][2];	//解析領域
-	rigion[A_X][0]=-1.2*R; rigion[A_X][1]=1.2*R;
-	rigion[A_Y][0]=-1.2*R; rigion[A_Y][1]=1.2*R;
-	rigion[A_Z][0]=-0.2*R; rigion[A_Z][1]=1.2*R;
 
-	MD_3D(X,Y,Z,le,0,beforeN,beforeN,newN,r,rigion);
+		//分子動力学により位置を最適化
+		double r=1.50;
+		double rigion[3][2];	//解析領域
+		rigion[A_X][0]=-1.2*R; rigion[A_X][1]=1.2*R;
+		rigion[A_Y][0]=-1.2*R; rigion[A_Y][1]=1.2*R;
+		rigion[A_Z][0]=-0.2*R; rigion[A_Z][1]=1.2*R;
 
-	*number=*number+newN;
+		MD_3D(X,Y,Z,le,0,beforeN,beforeN,newN,r,rigion);
+
+		*number=*number+newN;
 	}
 
 	///上半球を下半球へｺﾋﾟｰし球を完成
@@ -1991,7 +1991,7 @@ void set_sphere(vector<double> &X,vector<double> &Y,vector<double> &Z,int *numbe
 	{
 		for(int k=beforeN2;k<*number;k++) Z[k]*=-1;
 	}
-	
+
 }
 
 void set_sphere2(vector<double> &X,vector<double> &Y,vector<double> &Z,int *number,double le,double R,int flag,int *suf_num)
@@ -2023,7 +2023,7 @@ void set_sphere2(vector<double> &X,vector<double> &Y,vector<double> &Z,int *numb
 		int Nf=calc_division_N_circle(round,le);//球表面の、θ方向の分割数
 		double Lf=round/Nf;						//球表面の、θ方向の分割距離
 		double d_fai=Lf/r;						//弧の長さがLfになる角度
-		
+
 		for(int i=0;i<Nf;i++)
 		{
 			double fai=d_fai*i;
@@ -2041,7 +2041,7 @@ void set_sphere2(vector<double> &X,vector<double> &Y,vector<double> &Z,int *numb
 			X.push_back(x);
 			Y.push_back(y);
 			Z.push_back(z);
-			
+
 			newN++;
 		}
 	}
@@ -2059,74 +2059,74 @@ void set_sphere2(vector<double> &X,vector<double> &Y,vector<double> &Z,int *numb
 
 	if(flag!=HALFD_shell)
 	{
-	newN=0;					//個の関数で新しく追加する粒子数
-	beforeN=*number;		//この関数呼び出し時における粒子数
-	
-	//内部初期位置
-	for(int i=-half_WX;i<=half_WX;i++)
-	{
-		for(int j=-half_WY;j<=half_WY;j++)
+		newN=0;					//個の関数で新しく追加する粒子数
+		beforeN=*number;		//この関数呼び出し時における粒子数
+
+		//内部初期位置
+		for(int i=-half_WX;i<=half_WX;i++)
 		{
-			for(int k=1;k<half_WZ;k++)
+			for(int j=-half_WY;j<=half_WY;j++)
 			{
-				double ii=i*le;
-				double jj=j*le*A;
-				double kk=k*le*B;
-				if(j%2!=0) ii+=0.5*le;//jが奇数ならiiを0.5格子だけずらす
-				if(k%2!=0) {ii+=0.5*le; jj+=sqrt(3.0)/6*le;}//kが奇数ならiiとjjをずらす
-				if(ii*ii+jj*jj+kk*kk<R2*R2*0.6*0.6)//半径*0.7内の粒子は位置固定
+				for(int k=1;k<half_WZ;k++)
 				{
-					X.push_back(ii);
-					Y.push_back(jj);
-					Z.push_back(kk);
-					newN++;
+					double ii=i*le;
+					double jj=j*le*A;
+					double kk=k*le*B;
+					if(j%2!=0) ii+=0.5*le;//jが奇数ならiiを0.5格子だけずらす
+					if(k%2!=0) {ii+=0.5*le; jj+=sqrt(3.0)/6*le;}//kが奇数ならiiとjjをずらす
+					if(ii*ii+jj*jj+kk*kk<R2*R2*0.6*0.6)//半径*0.7内の粒子は位置固定
+					{
+						X.push_back(ii);
+						Y.push_back(jj);
+						Z.push_back(kk);
+						newN++;
+					}
 				}
 			}
 		}
-	}
-	*number=*number+newN;
+		*number=*number+newN;
 
-	newN=0;					//個の関数で新しく追加する粒子数
-	beforeN=*number;		//この関数呼び出し時における粒子数
-	///////////////////////*/
+		newN=0;					//個の関数で新しく追加する粒子数
+		beforeN=*number;		//この関数呼び出し時における粒子数
+		///////////////////////*/
 
-	
 
-	//内部初期位置
-	for(int i=-half_WX;i<=half_WX;i++)
-	{
-		for(int j=-half_WY;j<=half_WY;j++)
+
+		//内部初期位置
+		for(int i=-half_WX;i<=half_WX;i++)
 		{
-			for(int k=1;k<half_WZ;k++)
+			for(int j=-half_WY;j<=half_WY;j++)
 			{
-				double ii=i*le;
-				double jj=j*le*A;
-				double kk=k*le*B;
-				if(j%2!=0) ii+=0.5*le;//jが奇数ならiiを0.5格子だけずらす
-				if(k%2!=0) {ii+=0.5*le; jj+=sqrt(3.0)/6*le;}//kが奇数ならiiとjjをずらす
-				//if(ii*ii+jj*jj+kk*kk<R2*R2)
-				if(ii*ii+jj*jj+kk*kk<R2*R2 && ii*ii+jj*jj+kk*kk>=R2*R2*0.6*0.6)
+				for(int k=1;k<half_WZ;k++)
 				{
-					X.push_back(ii);
-					Y.push_back(jj);
-					Z.push_back(kk);
-					newN++;
+					double ii=i*le;
+					double jj=j*le*A;
+					double kk=k*le*B;
+					if(j%2!=0) ii+=0.5*le;//jが奇数ならiiを0.5格子だけずらす
+					if(k%2!=0) {ii+=0.5*le; jj+=sqrt(3.0)/6*le;}//kが奇数ならiiとjjをずらす
+					//if(ii*ii+jj*jj+kk*kk<R2*R2)
+					if(ii*ii+jj*jj+kk*kk<R2*R2 && ii*ii+jj*jj+kk*kk>=R2*R2*0.6*0.6)
+					{
+						X.push_back(ii);
+						Y.push_back(jj);
+						Z.push_back(kk);
+						newN++;
+					}
 				}
 			}
-		}
-	}///////////////////////*/
-	
+		}///////////////////////*/
 
-	//分子動力学により位置を最適化
-	double r=1.5;
-	double rigion[3][2];	//解析領域
-	rigion[A_X][0]=-1.2*R; rigion[A_X][1]=1.2*R;
-	rigion[A_Y][0]=-1.2*R; rigion[A_Y][1]=1.2*R;
-	rigion[A_Z][0]=-0.2*R; rigion[A_Z][1]=1.2*R;
 
-	MD_3D(X,Y,Z,le,0,beforeN,beforeN,newN,r,rigion);
+		//分子動力学により位置を最適化
+		double r=1.5;
+		double rigion[3][2];	//解析領域
+		rigion[A_X][0]=-1.2*R; rigion[A_X][1]=1.2*R;
+		rigion[A_Y][0]=-1.2*R; rigion[A_Y][1]=1.2*R;
+		rigion[A_Z][0]=-0.2*R; rigion[A_Z][1]=1.2*R;
 
-	*number=*number+newN;
+		MD_3D(X,Y,Z,le,0,beforeN,beforeN,newN,r,rigion);
+
+		*number=*number+newN;
 	}
 
 	///上半球を下半球へｺﾋﾟｰし球を完成
@@ -2151,7 +2151,7 @@ void set_sphere2(vector<double> &X,vector<double> &Y,vector<double> &Z,int *numb
 	{
 		for(int k=beforeN2;k<*number;k++) Z[k]*=-1;
 	}
-	
+
 }
 
 
@@ -2194,7 +2194,7 @@ void MD_2D(vector<double> &X,vector<double> &Y,vector<double> &Z,double le,int B
 	double k0=1;
 	double r=1.5;
 	double dt=0.001;
-	
+
 	//力はax^3+bx^2+dの式を採用。文献[Bubble Mesh Automated Triangular Meshing of Non-Manifold Geometry by Sphere Packing]を参照
 	double a=(r+1)/(2*r*r-r-1)*k0/(le*le);
 	double b=-0.5*k0/le-1.5*a*le;
@@ -2236,7 +2236,7 @@ void MD_2D(vector<double> &X,vector<double> &Y,vector<double> &Z,double le,int B
 		index[k]=number;
 	}//////////////////////////////////////////
 
-	
+
 	//計算開始
 	for(int t=0;t<100;t++)
 	{
@@ -2248,7 +2248,7 @@ void MD_2D(vector<double> &X,vector<double> &Y,vector<double> &Z,double le,int B
 				size_t size=MESH[n].size();
 				for(int k=0;k<size;k++) MESH[n].pop_back();
 			}
-			
+
 			for(int i=BstartID;i<BendID;i++)	//まずは境界粒子を格子に格納
 			{
 				int xn=(int)((X[i]-region[A_X][0])/grid_width);	//X方向に何個目の格子か 
@@ -2303,7 +2303,7 @@ void MD_2D(vector<double> &X,vector<double> &Y,vector<double> &Z,double le,int B
 			Ax[k]=(Fx[k]-visX[k]*U[k]);
 			Ay[k]=(Fy[k]-visY[k]*V[k]);
 		}//各粒子の加速度が求まった。
-		
+
 		if(t==0)	//最初のｽﾃｯﾌﾟ時にdtを決定
 		{
 			double MaxAccel=0;
@@ -2384,7 +2384,7 @@ void MD_3D(vector<double> &X,vector<double> &Y,vector<double> &Z,double le,int B
 	//分子動力学によりnewN個の粒子の位置を最適化　IDがBstartIDからBendIDまでのは境界粒子なので動かさない
 	double k0=1;
 	double dt=0.001;
-	
+
 	//力はax^3+bx^2+dの式を採用。文献[Bubble Mesh Automated Triangular Meshing of Non-Manifold Geometry by Sphere Packing]を参照
 	double a=(r+1)/(2*r*r-r-1)*k0/(le*le);
 	double b=-0.5*k0/le-1.5*a*le;
@@ -2419,17 +2419,17 @@ void MD_3D(vector<double> &X,vector<double> &Y,vector<double> &Z,double le,int B
 	int plane_SIZE=grid_sizeX*grid_sizeY;
 	int *index=new int[newN];									//各内部粒子を含む格子番号
 	vector<int> *MESH=new vector<int>[grid_SIZE];				//各メッシュに格納される粒子ID格納
-//	cout<<"grid="<<grid_SIZE<<endl;
+	//	cout<<"grid="<<grid_SIZE<<endl;
 	for(int i=BstartID;i<BendID;i++)	//まずは境界粒子を格子に格納
 	{
 		int xn=(int)((X[i]-region[A_X][0])/grid_width);//X方向に何個目の格子か 
 		int yn=(int)((Y[i]-region[A_Y][0])/grid_width);//Y方向に何個目の格子か
 		int zn=(int)((Z[i]-region[A_Z][0])/grid_width);//Z方向に何個目の格子か
 		int number=zn*grid_sizeX*grid_sizeY+yn*grid_sizeX+xn;//粒子iを含む格子の番号
-//		cout<<number<<endl;
-//		if(X[i]<region[A_X][0] || X[i]>region[A_X][1])cout<<"Xsize="<<X[i]<<endl;
-//		if(Y[i]<region[A_Y][0] || Y[i]>region[A_Y][1])cout<<"Ysize="<<Y[i]<<endl;
-//		if(Z[i]<region[A_Z][0] || Z[i]>region[A_Z][1])cout<<"Zsize="<<Z[i]<<endl;
+		//		cout<<number<<endl;
+		//		if(X[i]<region[A_X][0] || X[i]>region[A_X][1])cout<<"Xsize="<<X[i]<<endl;
+		//		if(Y[i]<region[A_Y][0] || Y[i]>region[A_Y][1])cout<<"Ysize="<<Y[i]<<endl;
+		//		if(Z[i]<region[A_Z][0] || Z[i]>region[A_Z][1])cout<<"Zsize="<<Z[i]<<endl;
 		MESH[number].push_back(i);
 	}
 	for(int k=0;k<newN;k++)	//つぎに内部粒子を格納
@@ -2454,7 +2454,7 @@ void MD_3D(vector<double> &X,vector<double> &Y,vector<double> &Z,double le,int B
 				size_t size=MESH[n].size();
 				for(int k=0;k<size;k++) MESH[n].pop_back();
 			}
-			
+
 			for(int i=BstartID;i<BendID;i++)	//まずは境界粒子を格子に格納
 			{
 				int xn=(int)((X[i]-region[A_X][0])/grid_width);//X方向に何個目の格子か 
@@ -2554,7 +2554,7 @@ void MD_3D(vector<double> &X,vector<double> &Y,vector<double> &Z,double le,int B
 			Ay[k]=(Fy[k]-visY[k]*V[k]);
 			Az[k]=(Fz[k]-visZ[k]*W[k]);
 		}//各粒子の加速度が求まった。
-		
+
 		if(t==0)	//最初のｽﾃｯﾌﾟ時にdtを決定
 		{
 			double MaxAccel=0;
@@ -2649,9 +2649,9 @@ void MD_3D(vector<double> &X,vector<double> &Y,vector<double> &Z,double le,int B
 void set_rectangular_edge(vector<double> &X,vector<double> &Y,vector<double> &Z,int *number,double le,double Len_H,double Len_V)
 {
 	//水平方向長さLen_H,垂直長さLen_Vの長方形の辺を作成する
-	
+
 	int newN=0;					//この関数で追加される粒子数
-	
+
 	////////////////////まず水平方向作成
 
 	int Nh;				//水平辺の分割数
@@ -2701,7 +2701,7 @@ void set_rectangular_edge(vector<double> &X,vector<double> &Y,vector<double> &Z,
 void set_rectangular_in(vector<double> &X,vector<double> &Y,vector<double> &Z,int *number,double le,double Len_H,double Len_V,int edge_startID,int edge_lastID)
 {
 	//水平方向長さLen_H,垂直長さLen_Vの長方形の辺を作成する
-	
+
 	int newN=0;					//この関数で追加される粒子数
 	int beforeN=*number;			//この関数呼び出し時にすでに存在している粒子数
 
@@ -2710,7 +2710,7 @@ void set_rectangular_in(vector<double> &X,vector<double> &Y,vector<double> &Z,in
 	int half_WX=(int)(Len_H/le)+1;  //長方形を十分含む幅
 	int half_WY=(int)(Len_V/(le*A))+1;
 	double gap=0.4*le;				//辺ぎりぎりに内部粒子を配置しないよう、隙間を設ける
-	
+
 	//初期位置
 	for(int i=-half_WX;i<=half_WX;i++)
 	{
@@ -2834,10 +2834,10 @@ void set_cylinder_face(vector<double> &X,vector<double> &Y,vector<double> &Z,int
 				double r=sqrt(X[i]*X[i]+Y[i]*Y[i]);
 				if(r>R && r<R+4*le-0.1*le)//外周のみ作成
 				{
-				X.push_back(X[i]);
-				Y.push_back(Y[i]);
-				Z.push_back(height);
-				newN++;
+					X.push_back(X[i]);
+					Y.push_back(Y[i]);
+					Z.push_back(height);
+					newN++;
 				}
 			}
 		}
@@ -2906,7 +2906,7 @@ void set_cylinder_face(vector<double> &X,vector<double> &Y,vector<double> &Z,int
 		}
 	}
 	*number=*number+newN;
-	
+
 	/////////////////////////////
 
 }
@@ -2995,10 +2995,10 @@ void set_cylinder_in(vector<double> &X,vector<double> &Y,vector<double> &Z,doubl
 					if(kk<height2)
 					{
 						if(!(ii*ii+jj*jj<erast_r*erast_r && (kk<erast_h+0.005 && kk>0.005))){
-						X.push_back(ii);
-						Y.push_back(jj);
-						Z.push_back(kk);
-						newN++;
+							X.push_back(ii);
+							Y.push_back(jj);
+							Z.push_back(kk);
+							newN++;
 						}
 					}
 				}
@@ -3065,7 +3065,7 @@ void set_crucible_in(vector<double> &X,vector<double> &Y,vector<double> &Z,int *
 						newN++;
 					}
 				}
-				
+
 			}
 		}
 	}///////////////////////*/
@@ -3078,7 +3078,7 @@ void set_crucible_in(vector<double> &X,vector<double> &Y,vector<double> &Z,int *
 	rigion[A_Z][0]=-1.2*R_out;  rigion[A_Z][1]=height*1.5;
 
 	MD_3D(X,Y,Z,le,fluid_number,beforeN,beforeN,newN,r,rigion);
-	
+
 	*number=*number+newN;
 
 }
@@ -3136,7 +3136,7 @@ void set_doughnut2D(vector<double> &X,vector<double> &Y,vector<double> &Z,int *n
 void set_hat_in(vector<double> &X,vector<double> &Y,vector<double> &Z,int *number,double le,double R_smal,double R_big,double H_hat,double H_flange,int bound_startID,int bound_endID)
 {
 	//帽子型の物質内部を作成する。例えばFSWのツール形状。
-	
+
 	//帽子の頭に該当する半径をR_smal,つばに該当する半径をR_big,つばの幅をH_flange,頭の幅をH_hat
 	//ここで作成する帽子型の姿勢は、FSWのツールと同じで、頭を下にしてつばが上。
 	//プローブ底辺のZ=0とする
@@ -3155,7 +3155,7 @@ void set_hat_in(vector<double> &X,vector<double> &Y,vector<double> &Z,int *numbe
 	double R_big2=R_big-gap;				//少し小さめの半径を設定
 	double R_smal2=R_smal-gap;				//少し小さめの半径を設定
 	double height2=height-0.3*le;				//少し小さめの高さを設定
-	
+
 
 	//内部初期位置
 	for(int i=-WX;i<=WX;i++)
@@ -3229,7 +3229,7 @@ void set_box(vector<double> &X,vector<double> &Y,vector<double> &Z,vector<int> &
 	double dL_height;			//行き方向の分割長さ
 
 	double gap=0.4*le;
-	
+
 	calc_N_and_L(Depth,le,&Ndepth,&dL_depth);//各方向の分割数とその長さが求まる
 	calc_N_and_L(Width,le,&Nwidth,&dL_width);
 	calc_N_and_L(Height,le,&Nheight,&dL_height);
@@ -3261,7 +3261,7 @@ void set_box(vector<double> &X,vector<double> &Y,vector<double> &Z,vector<int> &
 		X2[i]+=Width*0.5;
 		Y2[i]+=Height*0.5;		//set_rectangular()は2D用なので、Zは値がゼロに注意
 	}
-		//粒子追加
+	//粒子追加
 	newN=0;
 	beforeN=*number;
 	for(int i=0;i<number2;i++)								//正式な座標に移動し、正式配列にｺﾋﾟｰ
@@ -3305,7 +3305,7 @@ void set_box(vector<double> &X,vector<double> &Y,vector<double> &Z,vector<int> &
 		X2[i]+=Depth*0.5;
 		Y2[i]+=Height*0.5;									//set_rectangular()は2D用なので、Zは値がゼロに注意
 	}
-		//粒子追加
+	//粒子追加
 	newN=0;
 	beforeN=*number;
 	for(int i=0;i<number2;i++)								//正式な座標に移動し、正式配列にｺﾋﾟｰ
@@ -3333,12 +3333,12 @@ void set_box(vector<double> &X,vector<double> &Y,vector<double> &Z,vector<int> &
 	}
 	*number=*number+newN;				//背面粒子配置完了
 	////////////////////////////////////////////////////////////
-	
+
 	for(int i= BOX_startID;i<*number;i++)  surface.push_back(ON);//ここまでは表面
 	beforeN=*number;
 
 	set_box_in(X,Y,Z,number,le,Width,Height,Depth,BOX_startID,*number);
-	
+
 	for(int i=beforeN;i<*number;i++) surface.push_back(OFF);//内部
 }
 
@@ -3358,7 +3358,7 @@ void set_box_in(vector<double> &X,vector<double> &Y,vector<double> &Z,int *numbe
 
 	int newN=0;					//個の関数で新しく追加する粒子数
 	int beforeN=*number;		//この関数呼び出し時における粒子数
-	
+
 	double A=sqrt(3.0)/2;				//よく使う係数
 	double B=sqrt(2.0/3);						////よく使う係数
 
@@ -3366,7 +3366,7 @@ void set_box_in(vector<double> &X,vector<double> &Y,vector<double> &Z,int *numbe
 	int WY=(int)(Depth/(le*A))+1; 
 	int WZ=(int)(Height/(le*B))+1;  
 	double gap=0.4*le;					//隙間
-	
+
 	//内部固定初期位置
 	for(int i=1;i<=WX;i++)
 	{
@@ -3412,7 +3412,7 @@ void set_box_in(vector<double> &X,vector<double> &Y,vector<double> &Z,int *numbe
 				if(kk<Height-gap && jj<Depth-gap && ii<Width-gap)
 				{
 					if(kk<=Height*0.25 || jj<=Depth*0.25 || ii<=Width*0.25 || kk>=Height*0.75 || jj>=Depth*0.75 || ii>=Width*0.75)
-//					if(kk<=Height*0.2 || jj<=Depth*0.2 || ii<=Width*0.2 || kk>=Height*0.8 || jj>=Depth*0.8 || ii>=Width*0.8)
+						//					if(kk<=Height*0.2 || jj<=Depth*0.2 || ii<=Width*0.2 || kk>=Height*0.8 || jj>=Depth*0.8 || ii>=Width*0.8)
 					{
 						X.push_back(ii);
 						Y.push_back(jj);
@@ -3529,7 +3529,7 @@ void make_fusion3D(vector<double> &X,vector<double> &Y,vector<double> &Z,vector<
 					for(int L=0;L<MESH_pri[M_id].size();L++)//近隣の優先粒子を探索
 					{
 						int j=MESH_pri[M_id][L];
-						
+
 						double x=X[j]-X2[i];
 						double y=Y[j]-Y2[i];
 						double z=Z[j]-Z2[i];
@@ -3579,6 +3579,6 @@ void make_fusion3D(vector<double> &X,vector<double> &Y,vector<double> &Z,vector<
 	delete [] MESH_pri;
 	//delete [] MESH_neg;
 	delete [] flag;
-	
+
 }
 

@@ -23,8 +23,8 @@ mpsconfig::mpsconfig()
 	fin.close();*/
 	
 	step=100000;				//全step数
-	switch_FEM=true;		//FEMを実行するかしないか false
-	nonlinear_elastic=false;	//弾性体非線形計算するかtrue
+	switch_FEM=false;		//FEMを実行するかしないか false
+	nonlinear_elastic=true;	//弾性体非線形計算するかtrue
 	switch_vis=OFF;			//粘性項計算するかしないか・・・これはあとで消す
 	FEMCG=2;				//FEMにおける行列解法 0:CG 1:ICCG 2:並列ICCG 3:MRTR 4:ICMRTR
 
@@ -37,7 +37,7 @@ mpsconfig::mpsconfig()
 	current_time=0.0;
 	dimension=3;
 
-	interval=2; //10	//particle_movie.mgfの出力間隔。2以上の整数にすること
+	interval=1; //10	//particle_movie.mgfの出力間隔。2以上の整数にすること
 	EM_interval=5;//1	//電磁場計算を何ステップに一回行うか。通常は1に設定
 	motion_interval=1;	//運動方程式を何回に一回解くか
 	
@@ -201,7 +201,7 @@ mpsconfig::mpsconfig()
 	magnet_r=0.0040;//0.01	//永久磁石の半径0.005 　　　　　　　　　　　//J_input_way=2:半径ではなく直径、J_put_way=0:半径　と思われる。
 	magnet_Z=-0.0040; //-45*0.0005-0.005; //-(fluidwidth)*distancebp-0.01; //-0.0125*0.8		//永久磁石の中心のZ座標 42*0.0005 //-magnet_H/2-(15*distancebp+0.002) モデル5:-0.035
 	magnet_angle=0.0;			//永久磁石の着磁方向 0なら+Z方向となる。そこから角度をつけたいなら、その角度[deg]を入力する
-	magnet_B=2.0;//0.145;//1.20;			//永久磁石の強さ[T] Avector3D()で指定
+	magnet_B=0.28;//0.145;//1.20;			//永久磁石の強さ[T] Avector3D()で指定
 	magnetic_layers=1;	//永久磁石周辺の空気層の数1層はすでにある 1+
 	uniform_B=0.00; //0.01;	//一様磁場の大きさ[T]?
 	B_times=1;//0.1			//ファイル出力する際の、磁束密度の倍率
