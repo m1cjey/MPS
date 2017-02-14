@@ -149,7 +149,7 @@ void MPSTOFEM3D_MRE(mpsconfig &CON, int *node_num, vector<point3D> &NODE, vector
 	int divN[3];
 	divN[A_R]=20;//半径方向分割数
 	divN[A_t]=20;//角度方向分割数（正何角形で近似するか）
-	divN[A_Z]=20;//高さ方向分割数
+	divN[A_Z]=2;//高さ方向分割数
 	double Rmin=0.0;
 	double Rmax=CON.get_magnet_r();
 

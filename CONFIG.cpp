@@ -29,7 +29,7 @@ mpsconfig::mpsconfig()
 	FEMCG=2;				//FEMにおける行列解法 0:CG 1:ICCG 2:並列ICCG 3:MRTR 4:ICMRTR
 
 //	dt= (switch_FEM==OFF) ? 1.0e-5: 5.0e-6; //0.0001;不安定要因！ 0.00001:推奨(Courant数考えて) //Cf. dt_for_FEM=0.000001/2;
-	dt=1.0e-4;
+	dt=1.0e-5;
 	dt_for_FEM=1.0e-5;
 	//FEMだと0.000001で止まる・・・
 //	step=20000;//40000;	//30000;//10000;;	//79*20+1;
@@ -46,7 +46,7 @@ mpsconfig::mpsconfig()
 	ave_P_for_FEM_flag=8000000000;//80.0;//75.0;//70.0;
 
 //モデル
-	model_number=8;			//4:引っ張り試験片 7:MREアクチュエータ 12:剛体
+	model_number=22;			//4:引っ張り試験片 7:MREアクチュエータ 12:剛体
 	model_set_way=0;		//modelをセットする方法　0=正方格子 1=MD
 
 //モデル１,11専用
@@ -73,7 +73,7 @@ mpsconfig::mpsconfig()
 
 
 //電磁力計算
-	region_shape=1;//1;		//解析領域形状　0=立方体 1=円筒
+	region_shape=0;//1;		//解析領域形状　0=立方体 1=円筒
 	EM_method=1;			//電磁場の解法 0=OFF 1=FEM 2=BEM 3=磁気ﾓｰﾒﾝﾄ法 4=FEM2
 	EM_calc_type=2;			//0=デローニのみ 1=電場 2=静磁場 3=動磁場 4=磁位
 //	EM_interval=1;//1		//電磁場計算を何ステップに一回行うか。通常は1に設定
@@ -87,10 +87,10 @@ mpsconfig::mpsconfig()
 	RU=0.1;//0.1;				//解析領域が円筒形となるときのその半径
 
 //流体の物性値
-	MRE_density=1826;          //water:997.04  エタノール:798[kg/m3]
+	MRE_density=1554.354;          //water:997.04  エタノール:798[kg/m3]
 	Silicone_density=980;
 	flag_modify_density=ON;	//密度補償するかどうか
-	nensei=1.00; //[Pa・s]//water:0.001 エタノール:0.001084 nensei 8.0
+	nensei=800*1.e6; //[Pa・s]//water:0.001 エタノール:0.001084 nensei 8.0
 	sigma=0.07196;			//water:0.07196 エタノール:0.02361 SUS404:1.85 表面張力係数
 	Cp=640/10;     			//water:4.2[kJ/(kg・K)] 鋼:800J SUS404:645J/(kgK)　
 	k=28;       			//water:0.6[W/(m・K)] //熱伝導率
@@ -109,7 +109,7 @@ mpsconfig::mpsconfig()
 	///////////////////
 //粒子配置用
 	fluidwidth=20; //30;//40//15[個]	//fluidwidth=20*2;
-	distancebp=0.0010;///0.001/2;//0.005; //distancebp=0.0125;[mm]
+	distancebp=9.e-3/4.;///0.001/2;//0.005; //distancebp=0.0125;[mm]
 	wlength=2;
 	height=0.0;//0.005;    
 
@@ -182,14 +182,14 @@ mpsconfig::mpsconfig()
 	mesh_output_interval=1;//1;	//メッシュ情報を、有限要素法のステップに対して、何ステップに一度出力するか。
 	FEMCGep=5.0e-5;			//1.3e-4PICCG 元々5.0e-6
 	MRTRep=6.8e-4;		//MRTR(&ICMRTR)法の収束判定
-	FEM_calc_type=3;		//0=OFF 1=電場 2=磁場 3=磁場(渦電流) 4=磁位 5=非線形静磁場
+	FEM_calc_type=2;		//0=OFF 1=電場 2=磁場 3=磁場(渦電流) 4=磁位 5=非線形静磁場
 	ele_type=1;				//(mesher=0の場合) 要素ﾀｲﾌﾟ 0:節点要素 1:辺要素
 
 //磁場計算
 	J_input_way=0;			//電流密度入手方法 0:OFF 1:自分 2:ソフト
 	J0=0.0;//100;//180000000;		//強制電流密度[A/m2]
 	I0=450.0;//200; mA?
-	RP=2.0;//2//1.5;//1.28;	//比透磁率
+	RP=2.37900201;	//2//1.5;//1.28;	//比透磁率
 	ele_conduc=1e7;			//電気伝導率
 	Hz=10;			//周波数
 	div_Hz=4;				//１周期の分割数(解析精度) 4の倍数がいい 40?
@@ -267,7 +267,7 @@ mpsconfig::mpsconfig()
 	
 //速度プロット変数
 	speed_plot_particle=2;	//速度をプロットする粒子の種類 1=すべて 2=fluid 3=壁
-	speedtimes=5.0e-3;		//速度プロット時の、座標に対する速度の倍率
+	speedtimes=1;		//5.0e-3;		//速度プロット時の、座標に対する速度の倍率
 	speed_face=0;			//3D解析時のspeed.datの出力面 0=YZ平面 1=XZ
 	speed_face_p=0.0;		//3D解析時のspeed.datの出力面の座標
 	ax_sym_modify=OFF;		//3D時のspeed.datに関して、軸対称による出力修正を行うか否か　1=ON 0=OF
